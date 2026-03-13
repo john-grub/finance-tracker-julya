@@ -1,0 +1,2953 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FinTrack — Project Blueprint</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F7F5F0;
+    --surface: #FFFFFF;
+    --border: #E2DDD6;
+    --text: #1A1814;
+    --muted: #7A746B;
+    --accent: #2D6A4F;
+    --accent-light: #D8F0E4;
+    --accent2: #E76F51;
+    --accent2-light: #FDEEE9;
+    --tag-bg: #EEE9E2;
+    --shadow: 0 2px 12px rgba(0,0,0,0.07);
+    --radius: 10px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ─── HEADER ─── */
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.4rem;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .logo-dot { color: var(--accent2); }
+
+  nav { display: flex; gap: 4px; }
+
+  nav button {
+    background: none;
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--muted);
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.18s;
+  }
+
+  nav button.active, nav button:hover {
+    background: var(--accent-light);
+    color: var(--accent);
+  }
+
+  /* ─── TABS ─── */
+  .tab-content { display: none; flex: 1; }
+  .tab-content.active { display: block; }
+
+  /* ─── MAIN LAYOUT ─── */
+  main { max-width: 1100px; margin: 0 auto; padding: 40px 24px; width: 100%; }
+
+  /* ─── HERO ─── */
+  .hero {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 40px 48px;
+    margin-bottom: 32px;
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+  }
+
+  .hero-left { flex: 1; }
+
+  .eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    background: var(--accent-light);
+    padding: 4px 10px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 14px;
+  }
+
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.2rem;
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+
+  .hero p { color: var(--muted); font-size: 0.95rem; line-height: 1.7; max-width: 460px; }
+
+  .meta-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 24px;
+  }
+
+  .meta-item {
+    background: var(--tag-bg);
+    border-radius: 8px;
+    padding: 12px 16px;
+  }
+
+  .meta-item .label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+
+  .meta-item .value { font-size: 0.9rem; font-weight: 600; }
+
+  .stack-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px;
+    min-width: 220px;
+  }
+
+  .stack-box h3 {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 14px;
+    font-weight: 500;
+  }
+
+  .stack-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.875rem;
+  }
+
+  .stack-item:last-child { border-bottom: none; }
+
+  .stack-icon {
+    width: 28px; height: 28px;
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .si-spring { background: #6DB33F22; color: #6DB33F; }
+  .si-pg { background: #33619622; color: #336196; }
+  .si-react { background: #61DAFB22; color: #1A8CA0; }
+  .si-jwt { background: #F0AE3222; color: #C8890A; }
+
+  /* ─── SECTION TITLES ─── */
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ─── TIMELINE ─── */
+  .timeline { margin-bottom: 40px; }
+
+  .week-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+
+  .week-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 20px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s;
+  }
+
+  .week-header:hover { background: var(--tag-bg); }
+
+  .week-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-weight: 500;
+  }
+
+  .badge-plan { background: var(--accent-light); color: var(--accent); }
+  .badge-impl { background: var(--accent2-light); color: var(--accent2); }
+
+  .week-title { font-weight: 600; font-size: 0.95rem; flex: 1; }
+  .week-days { font-size: 0.8rem; color: var(--muted); }
+
+  .week-chevron {
+    font-size: 0.7rem;
+    color: var(--muted);
+    transition: transform 0.2s;
+  }
+
+  .week-block.open .week-chevron { transform: rotate(180deg); }
+
+  .week-body {
+    display: none;
+    padding: 0 20px 20px;
+    border-top: 1px solid var(--border);
+  }
+
+  .week-block.open .week-body { display: block; }
+
+  .task-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 10px;
+    margin-top: 14px;
+  }
+
+  .task-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+  }
+
+  .task-card .t-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+
+  .task-card .t-title { font-size: 0.85rem; font-weight: 600; margin-bottom: 4px; }
+  .task-card .t-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.5; }
+
+  /* ─── ERD ─── */
+  .erd-container {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px;
+    margin-bottom: 40px;
+    overflow-x: auto;
+  }
+
+  .erd-canvas {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .erd-entity {
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    min-width: 200px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+
+  .erd-entity-header {
+    background: var(--accent);
+    color: white;
+    padding: 10px 14px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .erd-entity-header.orange { background: var(--accent2); }
+  .erd-entity-header.blue { background: #3B82F6; }
+  .erd-entity-header.purple { background: #8B5CF6; }
+
+  .erd-field {
+    padding: 8px 14px;
+    font-size: 0.78rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface);
+  }
+
+  .erd-field:last-child { border-bottom: none; }
+  .erd-field .fk { color: #3B82F6; font-size: 0.65rem; font-weight: 700; }
+  .erd-field .pk { color: var(--accent2); font-size: 0.65rem; font-weight: 700; }
+  .erd-field .fname { font-family: 'DM Mono', monospace; flex: 1; }
+  .erd-field .ftype { color: var(--muted); font-size: 0.7rem; }
+
+  .erd-relation-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin: 10px 0;
+    flex-wrap: wrap;
+  }
+
+  .erd-rel-label {
+    background: var(--tag-bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--muted);
+  }
+
+  .erd-arrow { color: var(--muted); font-size: 0.8rem; }
+
+  /* ─── API TABLE ─── */
+  .api-table {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 40px;
+  }
+
+  .api-table table { width: 100%; border-collapse: collapse; font-size: 0.83rem; }
+
+  .api-table thead th {
+    background: var(--tag-bg);
+    padding: 10px 16px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .api-table tbody td {
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+
+  .api-table tbody tr:last-child td { border-bottom: none; }
+
+  .method {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 4px;
+  }
+
+  .m-get { background: #DCFCE7; color: #166534; }
+  .m-post { background: #DBEAFE; color: #1D4ED8; }
+  .m-put { background: #FEF9C3; color: #854D0E; }
+  .m-delete { background: #FEE2E2; color: #991B1B; }
+
+  .endpoint { font-family: 'DM Mono', monospace; font-size: 0.78rem; }
+
+  /* ─── FOLDER TREE ─── */
+  .folder-tree {
+    background: #1A1814;
+    border-radius: var(--radius);
+    padding: 24px 28px;
+    margin-bottom: 40px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.82rem;
+    line-height: 1.9;
+    color: #BEB5A8;
+  }
+
+  .ft-dir { color: #6FCF97; }
+  .ft-file { color: #BEB5A8; }
+  .ft-comment { color: #5B5650; }
+  .ft-pkg { color: #F2994A; }
+
+  /* ─── COMPONENT ARCH ─── */
+  .comp-arch {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    margin-bottom: 40px;
+  }
+
+  .comp-row {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+
+  .comp-box {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 150px;
+  }
+
+  .comp-box .cb-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--muted);
+  }
+
+  .comp-box.page { background: var(--accent-light); border-color: #A8D5BE; }
+  .comp-box.component { background: #EBF5FB; border-color: #AED6F1; }
+  .comp-box.hook { background: #FEF9C3; border-color: #F9E79F; }
+  .comp-box.service { background: var(--accent2-light); border-color: #F5CDB8; }
+
+  .comp-arrow {
+    color: var(--muted);
+    font-size: 0.8rem;
+    padding-top: 12px;
+  }
+
+  /* ─── MOCKUPS TAB ─── */
+  .mockup-tab-content { background: #0F0F0F; min-height: 100vh; }
+
+  .mockup-nav {
+    background: #161616;
+    border-bottom: 1px solid #2A2A2A;
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 58px;
+    position: sticky;
+    top: 64px;
+    z-index: 90;
+  }
+
+  .mockup-nav-btn {
+    background: none;
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    color: #666;
+    padding: 7px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.18s;
+  }
+
+  .mockup-nav-btn.active, .mockup-nav-btn:hover {
+    background: #222;
+    color: #E0E0E0;
+  }
+
+  .mockup-screen { display: none; padding: 32px; }
+  .mockup-screen.active { display: block; }
+
+  .screen-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #444;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  /* ─── MOCKUP: BROWSER CHROME ─── */
+  .browser-chrome {
+    background: #1E1E1E;
+    border-radius: 12px 12px 0 0;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid #2A2A2A;
+  }
+
+  .browser-dots { display: flex; gap: 6px; }
+  .bd { width: 11px; height: 11px; border-radius: 50%; }
+  .bd-r { background: #FF5F57; }
+  .bd-y { background: #FEBC2E; }
+  .bd-g { background: #28C840; }
+
+  .browser-url {
+    background: #2A2A2A;
+    border-radius: 6px;
+    padding: 5px 14px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: #666;
+    flex: 1;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  .browser-body {
+    background: #1A1A2E;
+    border-radius: 0 0 12px 12px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  /* ─── MOCKUP: DASHBOARD ─── */
+  .mk-app-shell {
+    display: flex;
+    height: 560px;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .mk-sidebar {
+    width: 220px;
+    background: #0F172A;
+    padding: 24px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+
+  .mk-sidebar-logo {
+    font-family: 'DM Serif Display', serif;
+    color: #6EE7B7;
+    font-size: 1.2rem;
+    padding: 0 8px;
+    margin-bottom: 20px;
+  }
+
+  .mk-sidebar-logo span { color: #F472B6; }
+
+  .mk-nav-item {
+    padding: 9px 12px;
+    border-radius: 7px;
+    font-size: 0.8rem;
+    color: #64748B;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+  }
+
+  .mk-nav-item.active { background: #1E293B; color: #E2E8F0; }
+  .mk-nav-item:hover:not(.active) { background: #1A2237; }
+
+  .mk-main { flex: 1; background: #0F172A; overflow: hidden; display: flex; flex-direction: column; }
+
+  .mk-topbar {
+    background: #0F172A;
+    border-bottom: 1px solid #1E293B;
+    padding: 14px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .mk-topbar-title { font-size: 0.95rem; font-weight: 600; color: #E2E8F0; }
+
+  .mk-topbar-actions { display: flex; gap: 8px; }
+
+  .mk-btn {
+    padding: 7px 14px;
+    border-radius: 7px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+  }
+
+  .mk-btn-primary { background: #10B981; color: white; }
+  .mk-btn-ghost { background: #1E293B; color: #94A3B8; }
+
+  .mk-content { flex: 1; padding: 20px 24px; overflow-y: auto; background: #0B1121; }
+
+  .mk-stat-row { display: flex; gap: 12px; margin-bottom: 20px; }
+
+  .mk-stat-card {
+    flex: 1;
+    background: #1E293B;
+    border: 1px solid #334155;
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+
+  .mk-stat-label { font-size: 0.68rem; color: #64748B; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 6px; }
+  .mk-stat-value { font-size: 1.5rem; font-weight: 700; color: #E2E8F0; margin-bottom: 4px; }
+  .mk-stat-sub { font-size: 0.72rem; }
+  .mk-pos { color: #10B981; }
+  .mk-neg { color: #F43F5E; }
+
+  .mk-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+  .mk-card {
+    background: #1E293B;
+    border: 1px solid #334155;
+    border-radius: 10px;
+    padding: 16px;
+  }
+
+  .mk-card-title { font-size: 0.78rem; font-weight: 600; color: #94A3B8; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.06em; }
+
+  .mk-budget-item { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .mk-budget-item:last-child { margin-bottom: 0; }
+  .mk-budget-name { font-size: 0.78rem; color: #CBD5E1; flex: 1; }
+  .mk-budget-pct { font-size: 0.75rem; color: #94A3B8; min-width: 36px; text-align: right; }
+
+  .mk-progress-bar {
+    height: 6px;
+    background: #0F172A;
+    border-radius: 3px;
+    flex: 2;
+    overflow: hidden;
+  }
+
+  .mk-progress-fill {
+    height: 100%;
+    border-radius: 3px;
+  }
+
+  .p-green { background: #10B981; }
+  .p-yellow { background: #F59E0B; }
+  .p-red { background: #F43F5E; }
+  .p-blue { background: #3B82F6; }
+  .p-purple { background: #8B5CF6; }
+
+  .mk-tx-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #1E293B;
+  }
+
+  .mk-tx-item:last-child { border-bottom: none; }
+  .mk-tx-icon { width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; flex-shrink: 0; }
+  .mk-tx-name { font-size: 0.8rem; color: #CBD5E1; flex: 1; }
+  .mk-tx-cat { font-size: 0.68rem; color: #64748B; }
+  .mk-tx-amount { font-size: 0.82rem; font-weight: 600; }
+
+  /* ─── DONUT ─── */
+  .mk-donut-wrapper { display: flex; align-items: center; gap: 14px; }
+  .mk-donut-legend { display: flex; flex-direction: column; gap: 8px; }
+  .mk-legend-item { display: flex; align-items: center; gap: 6px; font-size: 0.72rem; color: #94A3B8; }
+  .mk-legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+  /* ─── BUDGET CREATE MODAL MOCKUP ─── */
+  .mk-modal-backdrop {
+    background: rgba(0,0,0,0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 560px;
+    position: relative;
+  }
+
+  .mk-modal-bg-blur {
+    position: absolute;
+    inset: 0;
+    background: #0B1121;
+    opacity: 0.85;
+  }
+
+  .mk-modal {
+    background: #1E293B;
+    border: 1px solid #334155;
+    border-radius: 14px;
+    padding: 28px 32px;
+    width: 380px;
+    position: relative;
+    z-index: 2;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+  }
+
+  .mk-modal-title { font-size: 1rem; font-weight: 700; color: #E2E8F0; margin-bottom: 4px; }
+  .mk-modal-sub { font-size: 0.78rem; color: #64748B; margin-bottom: 20px; }
+
+  .mk-form-group { margin-bottom: 14px; }
+  .mk-form-label { font-size: 0.72rem; color: #94A3B8; margin-bottom: 5px; display: block; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; }
+
+  .mk-form-input {
+    width: 100%;
+    background: #0F172A;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 0.82rem;
+    color: #CBD5E1;
+    outline: none;
+  }
+
+  .mk-form-input:focus { border-color: #10B981; }
+
+  .mk-color-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 6px;
+  }
+
+  .mk-color-swatch {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+  }
+
+  .mk-color-swatch.selected { border-color: white; }
+
+  .mk-modal-actions { display: flex; gap: 8px; margin-top: 20px; }
+
+  .mk-modal-actions .mk-btn { flex: 1; }
+
+  /* ─── GOALS PAGE MOCKUP ─── */
+  .mk-goal-card {
+    background: #1E293B;
+    border: 1px solid #334155;
+    border-radius: 10px;
+    padding: 14px;
+    margin-bottom: 10px;
+  }
+
+  .mk-goal-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+  .mk-goal-name { font-size: 0.85rem; font-weight: 600; color: #E2E8F0; }
+  .mk-goal-status { font-size: 0.68rem; padding: 3px 8px; border-radius: 4px; font-weight: 600; }
+  .gs-on-track { background: #052E1622; color: #10B981; border: 1px solid #052E16; }
+  .gs-warning { background: #78350F22; color: #F59E0B; border: 1px solid #78350F; }
+
+  .mk-goal-amounts { display: flex; justify-content: space-between; margin-bottom: 8px; }
+  .mk-goal-cur { font-size: 1.1rem; font-weight: 700; color: #E2E8F0; }
+  .mk-goal-target { font-size: 0.78rem; color: #64748B; align-self: flex-end; }
+
+  /* ─── FEATURE LIST ─── */
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 14px;
+    margin-bottom: 40px;
+  }
+
+  .feature-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+  }
+
+  .feature-icon {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    margin-bottom: 12px;
+  }
+
+  .fi-green { background: var(--accent-light); }
+  .fi-orange { background: var(--accent2-light); }
+  .fi-blue { background: #EBF5FB; }
+  .fi-purple { background: #F3F0FF; }
+
+  .feature-card h4 { font-size: 0.88rem; font-weight: 600; margin-bottom: 4px; }
+  .feature-card p { font-size: 0.78rem; color: var(--muted); line-height: 1.55; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+    padding: 24px 40px;
+    text-align: center;
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-top: auto;
+  }
+
+  footer strong { color: var(--text); }
+
+  /* ─── MISC ─── */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--tag-bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-size: 0.72rem;
+    font-weight: 500;
+    margin: 2px;
+  }
+
+  .chip.green { background: var(--accent-light); border-color: #A8D5BE; color: var(--accent); }
+  .chip.orange { background: var(--accent2-light); border-color: #F5CDB8; color: var(--accent2); }
+  .chip.blue { background: #EBF5FB; border-color: #AED6F1; color: #1A5276; }
+
+  .info-box {
+    background: var(--accent-light);
+    border: 1px solid #A8D5BE;
+    border-radius: 8px;
+    padding: 14px 18px;
+    font-size: 0.82rem;
+    color: var(--accent);
+    margin-bottom: 24px;
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+  }
+
+  @media (max-width: 700px) {
+    header { padding: 0 16px; }
+    main { padding: 20px 12px; }
+    .hero { flex-direction: column; padding: 24px 20px; }
+    .mk-sidebar { display: none; }
+    .mk-stat-row { flex-wrap: wrap; }
+    .mk-grid-2 { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ─── HEADER ─── -->
+<header>
+  <div class="logo">FinTrack<span class="logo-dot">.</span></div>
+  <nav>
+    <button class="active" onclick="switchTab('blueprint', this)">📋 Blueprint</button>
+    <button onclick="switchTab('mockups', this)">🖥️ Mockups</button>
+  </nav>
+</header>
+
+<!-- ══════════════════════════════════════════
+     TAB 1 — BLUEPRINT
+══════════════════════════════════════════ -->
+<div class="tab-content active" id="tab-blueprint">
+<main>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-left">
+      <span class="eyebrow">Project Blueprint · 2-Week Sprint</span>
+      <h1>FinTrack — Personal<br>Finance Tracker</h1>
+      <p>A production-grade budget management and finance tracking web app. Users can create custom budget categories, track spending, set financial goals, and get insights from a live dashboard.</p>
+      <div class="meta-grid">
+        <div class="meta-item">
+          <div class="label">Sprint Duration</div>
+          <div class="value">2 Weeks · 14 Days</div>
+        </div>
+        <div class="meta-item">
+          <div class="label">Dev Type</div>
+          <div class="value">Full-Stack Web App</div>
+        </div>
+        <div class="meta-item">
+          <div class="label">Architecture</div>
+          <div class="value">REST API + SPA</div>
+        </div>
+        <div class="meta-item">
+          <div class="label">Auth</div>
+          <div class="value">JWT + Spring Security</div>
+        </div>
+      </div>
+    </div>
+    <div class="stack-box">
+      <h3>Tech Stack</h3>
+      <div class="stack-item">
+        <div class="stack-icon si-spring">🍃</div>
+        <div>
+          <div style="font-weight:600;font-size:0.82rem">Spring Boot 3</div>
+          <div style="font-size:0.72rem;color:var(--muted)">Backend / REST API</div>
+        </div>
+      </div>
+      <div class="stack-item">
+        <div class="stack-icon si-pg">🐘</div>
+        <div>
+          <div style="font-weight:600;font-size:0.82rem">PostgreSQL 15</div>
+          <div style="font-size:0.72rem;color:var(--muted)">Relational Database</div>
+        </div>
+      </div>
+      <div class="stack-item">
+        <div class="stack-icon si-react">⚛</div>
+        <div>
+          <div style="font-weight:600;font-size:0.82rem">React + React Router</div>
+          <div style="font-size:0.72rem;color:var(--muted)">Frontend SPA</div>
+        </div>
+      </div>
+      <div class="stack-item">
+        <div class="stack-icon si-jwt">🔑</div>
+        <div>
+          <div style="font-weight:600;font-size:0.82rem">JWT + Spring Security</div>
+          <div style="font-size:0.72rem;color:var(--muted)">Authentication</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <div class="section-title">✦ Core Features</div>
+  <div class="feature-grid">
+    <div class="feature-card">
+      <div class="feature-icon fi-green">📊</div>
+      <h4>Budget Dashboard</h4>
+      <p>Live overview of total income, expenses, savings rate, and spending by category with visual charts.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon fi-orange">🗂️</div>
+      <h4>Custom Budget Categories</h4>
+      <p>Users create, name, color-code, and set spending limits for their own budget categories (Food, Travel, etc.).</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon fi-blue">🎯</div>
+      <h4>Budget Goals</h4>
+      <p>Set savings or spending goals with deadlines. Track progress with visual indicators and alerts.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon fi-purple">💸</div>
+      <h4>Transaction Logging</h4>
+      <p>Add, edit, and delete transactions. Assign to any custom category. Filter by date, type, or category.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon fi-green">🔐</div>
+      <h4>Auth & Multi-User</h4>
+      <p>Secure JWT-based login and registration. Each user's data is fully isolated and private.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon fi-orange">📅</div>
+      <h4>Monthly Reports</h4>
+      <p>View spending summaries by month. Compare months side by side to spot patterns.</p>
+    </div>
+  </div>
+
+  <!-- ERD -->
+  <div class="section-title">✦ Entity Relationship Diagram (ERD)</div>
+  <div class="erd-container">
+    <div class="erd-canvas">
+
+      <!-- USER -->
+      <div class="erd-entity">
+        <div class="erd-entity-header blue">👤 users</div>
+        <div class="erd-field"><span class="pk">PK</span><span class="fname">id</span><span class="ftype">BIGINT</span></div>
+        <div class="erd-field"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="fname">username</span><span class="ftype">VARCHAR(50)</span></div>
+        <div class="erd-field"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="fname">email</span><span class="ftype">VARCHAR(100)</span></div>
+        <div class="erd-field"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="fname">password_hash</span><span class="ftype">VARCHAR</span></div>
+        <div class="erd-field"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="fname">created_at</span><span class="ftype">TIMESTAMP</span></div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:60px;align-items:center;padding-top:40px">
+        <div class="erd-rel-label">1 → N</div>
+        <div class="erd-rel-label">1 → N</div>
+        <div class="erd-rel-label">1 → N</div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:16px">
+
+        <!-- BUDGET CATEGORY -->
+        <div class="erd-entity">
+          <div class="erd-entity-header">🗂️ budget_categories</div>
+          <div class="erd-field"><span class="pk">PK</span><span class="fname">id</span><span class="ftype">BIGINT</span></div>
+          <div class="erd-field"><span class="fk">FK</span><span class="fname">user_id</span><span class="ftype">BIGINT</span></div>
+          <div class="erd-field"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="fname">name</span><span class="ftype">VARCHAR(80)</span></div>
+          <div class="erd-field"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="fname">color_hex</span><span class="ftype">VARCHAR(7)</span></div>
+          <div class="erd-field"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="fname">monthly_limit</span><span class="ftype">DECIMAL(12,2)</span></div>
+          <div class="erd-field"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="fname">icon</span><span class="ftype">VARCHAR(20)</span></div>
+          <div class="erd-field"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="fname">created_at</span><span class="ftype">TIMESTAMP</span></div>
+        </div>
+
+        <!-- TRANSACTIONS -->
+        <div class="erd-entity">
+          <div class="erd-entity-header orange">💸 transactions</div>
+          <div class="erd-field"><span class="pk">PK</span><span class="fname">id</span><span class="ftype">BIGINT</span></div>
+          <div class="erd-field"><span class="fk">FK</span><span class="fname">user_id</span><span class="ftype">BIGINT</span></div>
+          <div class="erd-field"><span class="fk">FK</span><span class="fname">category_id</span><span class="ftype">BIGINT</span></div>
+          <div class="erd-field"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="fname">amount</span><span class="ftype">DECIMAL(12,2)</span></div>
+          <div class="erd-field"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="fname">type</span><span class="ftype">ENUM(income,expense)</span></div>
+          <div class="erd-field"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="fname">description</span><span class="ftype">TEXT</span></div>
+          <div class="erd-field"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="fname">transaction_date</span><span class="ftype">DATE</span></div>
+          <div class="erd-field"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="fname">created_at</span><span class="ftype">TIMESTAMP</span></div>
+        </div>
+
+        <!-- GOALS -->
+        <div class="erd-entity">
+          <div class="erd-entity-header purple">🎯 budget_goals</div>
+          <div class="erd-field"><span class="pk">PK</span><span class="fname">id</span><span class="ftype">BIGINT</span></div>
+          <div class="erd-field"><span class="fk">FK</span><span class="fname">user_id</span><span class="ftype">BIGINT</span></div>
+          <div class="erd-field"><span class="fk">FK</span><span class="fname">category_id</span><span class="ftype">BIGINT (nullable)</span></div>
+          <div class="erd-field"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="fname">name</span><span class="ftype">VARCHAR(100)</span></div>
+          <div class="erd-field"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="fname">target_amount</span><span class="ftype">DECIMAL(12,2)</span></div>
+          <div class="erd-field"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="fname">current_amount</span><span class="ftype">DECIMAL(12,2)</span></div>
+          <div class="erd-field"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="fname">deadline</span><span class="ftype">DATE</span></div>
+          <div class="erd-field"><span>&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="fname">status</span><span class="ftype">ENUM(active,done,paused)</span></div>
+        </div>
+
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:16px;font-size:0.75rem;color:var(--muted)">
+      <span class="chip">PK = Primary Key</span>
+      <span class="chip">FK = Foreign Key</span>
+      <span class="chip green">1 → N  One-to-Many</span>
+    </div>
+  </div>
+
+  <!-- 2-WEEK TIMELINE -->
+  <div class="section-title">✦ 2-Week Dev Timeline</div>
+  <div class="timeline">
+
+    <!-- WEEK 1 -->
+    <div class="info-box">
+      <span>📌</span>
+      <span><strong>Week 1</strong> — Planning, architecture, and backend foundations. Database, auth, and core APIs are the priority.</span>
+    </div>
+
+    <div class="week-block open">
+      <div class="week-header" onclick="toggleWeek(this)">
+        <span class="week-badge badge-plan">Planning</span>
+        <span class="week-title">Day 1–2 — Project Setup & Architecture</span>
+        <span class="week-days">Mon – Tue</span>
+        <span class="week-chevron">▼</span>
+      </div>
+      <div class="week-body">
+        <div class="task-grid">
+          <div class="task-card">
+            <div class="t-label">Backend</div>
+            <div class="t-title">Initialize Spring Boot Project</div>
+            <div class="t-desc">Create Maven/Gradle project. Add Spring Web, Spring Data JPA, Spring Security, JWT, and PostgreSQL dependencies.</div>
+          </div>
+          <div class="task-card">
+            <div class="t-label">Database</div>
+            <div class="t-title">Set Up PostgreSQL & Schema</div>
+            <div class="t-desc">Create local DB. Write schema SQL for users, budget_categories, transactions, budget_goals tables.</div>
+          </div>
+          <div class="task-card">
+            <div class="t-label">Frontend</div>
+            <div class="t-title">Initialize React App</div>
+            <div class="t-desc">Bootstrap with Vite. Install React Router v6, Axios, Recharts, Tailwind or CSS modules.</div>
+          </div>
+          <div class="task-card">
+            <div class="t-label">DevOps</div>
+            <div class="t-title">Git Repo & Folder Structure</div>
+            <div class="t-desc">Initialize monorepo. Set up .env for secrets. Define project folder conventions for both backend and frontend.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="week-block">
+      <div class="week-header" onclick="toggleWeek(this)">
+        <span class="week-badge badge-plan">Planning</span>
+        <span class="week-title">Day 3–4 — Auth & User Management</span>
+        <span class="week-days">Wed – Thu</span>
+        <span class="week-chevron">▼</span>
+      </div>
+      <div class="week-body">
+        <div class="task-grid">
+          <div class="task-card">
+            <div class="t-label">Backend</div>
+            <div class="t-title">JWT Auth Endpoints</div>
+            <div class="t-desc">Build <code>POST /api/auth/register</code> and <code>POST /api/auth/login</code> with password hashing (BCrypt).</div>
+          </div>
+          <div class="task-card">
+            <div class="t-label">Backend</div>
+            <div class="t-title">Spring Security Config</div>
+            <div class="t-desc">Configure JWT filter, SecurityFilterChain, and per-request user extraction middleware.</div>
+          </div>
+          <div class="task-card">
+            <div class="t-label">Frontend</div>
+            <div class="t-title">Login & Register Pages</div>
+            <div class="t-desc">Build auth forms with React Router. Store JWT in localStorage. Create AuthContext with useContext for global auth state.</div>
+          </div>
+          <div class="task-card">
+            <div class="t-label">Frontend</div>
+            <div class="t-title">Protected Routes</div>
+            <div class="t-desc">Create PrivateRoute component wrapping React Router's Outlet. Redirect unauthenticated users to /login.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="week-block">
+      <div class="week-header" onclick="toggleWeek(this)">
+        <span class="week-badge badge-impl">Build</span>
+        <span class="week-title">Day 5–7 — Budget Categories & Transactions API</span>
+        <span class="week-days">Fri – Sun</span>
+        <span class="week-chevron">▼</span>
+      </div>
+      <div class="week-body">
+        <div class="task-grid">
+          <div class="task-card">
+            <div class="t-label">Backend</div>
+            <div class="t-title">Budget Categories CRUD</div>
+            <div class="t-desc">REST endpoints: GET, POST, PUT, DELETE for /api/categories. All scoped to the authenticated user.</div>
+          </div>
+          <div class="task-card">
+            <div class="t-label">Backend</div>
+            <div class="t-title">Transactions CRUD</div>
+            <div class="t-desc">Full CRUD for /api/transactions. Support filtering by month, year, and category_id query params.</div>
+          </div>
+          <div class="task-card">
+            <div class="t-label">Frontend</div>
+            <div class="t-title">Budget Categories UI</div>
+            <div class="t-desc">Create categories page with a card grid. Add/Edit/Delete forms. Color-picker and emoji icon support.</div>
+          </div>
+          <div class="task-card">
+            <div class="t-label">Frontend</div>
+            <div class="t-title">Transactions Page</div>
+            <div class="t-desc">Transaction table with filters. Add transaction modal with category dropdown and date picker.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WEEK 2 -->
+    <div class="info-box" style="margin-top:20px">
+      <span>📌</span>
+      <span><strong>Week 2</strong> — Dashboard, goals, frontend polish, and testing/deployment.</span>
+    </div>
+
+    <div class="week-block">
+      <div class="week-header" onclick="toggleWeek(this)">
+        <span class="week-badge badge-impl">Build</span>
+        <span class="week-title">Day 8–9 — Dashboard & Goals</span>
+        <span class="week-days">Mon – Tue</span>
+        <span class="week-chevron">▼</span>
+      </div>
+      <div class="week-body">
+        <div class="task-grid">
+          <div class="task-card">
+            <div class="t-label">Backend</div>
+            <div class="t-title">Dashboard Summary Endpoint</div>
+            <div class="t-desc">Build <code>GET /api/dashboard/summary</code> returning total income, total expenses, savings, and per-category breakdown.</div>
+          </div>
+          <div class="task-card">
+            <div class="t-label">Backend</div>
+            <div class="t-title">Goals API</div>
+            <div class="t-desc">CRUD for /api/goals. Include computed progress_percentage field. Endpoint to update current_amount.</div>
+          </div>
+          <div class="task-card">
+            <div class="t-label">Frontend</div>
+            <div class="t-title">Dashboard Page</div>
+            <div class="t-desc">Stat cards (income, expenses, savings). Recharts donut for category spending. Recent transactions list.</div>
+          </div>
+          <div class="task-card">
+            <div class="t-label">Frontend</div>
+            <div class="t-title">Goals Page</div>
+            <div class="t-desc">Goal cards with progress bars, deadlines, and status chips. Create/edit goal modal.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="week-block">
+      <div class="week-header" onclick="toggleWeek(this)">
+        <span class="week-badge badge-impl">Build</span>
+        <span class="week-title">Day 10–11 — Frontend Polish & UX</span>
+        <span class="week-days">Wed – Thu</span>
+        <span class="week-chevron">▼</span>
+      </div>
+      <div class="week-body">
+        <div class="task-grid">
+          <div class="task-card">
+            <div class="t-label">Frontend</div>
+            <div class="t-title">Responsive Layout</div>
+            <div class="t-desc">Ensure sidebar collapses on mobile. Responsive stat grid and table. Hamburger menu.</div>
+          </div>
+          <div class="task-card">
+            <div class="t-label">Frontend</div>
+            <div class="t-title">Loading & Error States</div>
+            <div class="t-desc">Skeleton loaders for all async data. Global Axios error interceptor with toast notifications.</div>
+          </div>
+          <div class="task-card">
+            <div class="t-label">Frontend</div>
+            <div class="t-title">Monthly Report View</div>
+            <div class="t-desc">Month selector with bar chart comparing income vs expenses. Per-category breakdown table.</div>
+          </div>
+          <div class="task-card">
+            <div class="t-label">Backend</div>
+            <div class="t-title">Budget Limit Alerts</div>
+            <div class="t-desc">Add logic to flag categories that exceed their monthly_limit. Surface warning in dashboard API response.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="week-block">
+      <div class="week-header" onclick="toggleWeek(this)">
+        <span class="week-badge badge-plan">QA</span>
+        <span class="week-title">Day 12–13 — Testing & Bug Fixes</span>
+        <span class="week-days">Fri – Sat</span>
+        <span class="week-chevron">▼</span>
+      </div>
+      <div class="week-body">
+        <div class="task-grid">
+          <div class="task-card">
+            <div class="t-label">Backend</div>
+            <div class="t-title">Unit Tests (JUnit + Mockito)</div>
+            <div class="t-desc">Write unit tests for service layer: CategoryService, TransactionService, GoalService, AuthService.</div>
+          </div>
+          <div class="task-card">
+            <div class="t-label">Backend</div>
+            <div class="t-title">Integration Tests</div>
+            <div class="t-desc">Test REST controllers with MockMvc. Test auth flow, CRUD operations, and edge cases (empty data, invalid JWT).</div>
+          </div>
+          <div class="task-card">
+            <div class="t-label">Frontend</div>
+            <div class="t-title">E2E Manual QA</div>
+            <div class="t-desc">Walk through full user journey: register → create category → add transactions → set goal → view dashboard.</div>
+          </div>
+          <div class="task-card">
+            <div class="t-label">Both</div>
+            <div class="t-title">Bug Fixes</div>
+            <div class="t-desc">Fix identified issues, CORS config, edge cases for empty states, date timezone handling.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="week-block">
+      <div class="week-header" onclick="toggleWeek(this)">
+        <span class="week-badge badge-impl">Deploy</span>
+        <span class="week-title">Day 14 — Deployment & Wrap-Up</span>
+        <span class="week-days">Sunday</span>
+        <span class="week-chevron">▼</span>
+      </div>
+      <div class="week-body">
+        <div class="task-grid">
+          <div class="task-card">
+            <div class="t-label">DevOps</div>
+            <div class="t-title">Backend Deployment</div>
+            <div class="t-desc">Package Spring Boot as JAR. Deploy to Railway or Render. Set PostgreSQL env vars. Verify API health endpoint.</div>
+          </div>
+          <div class="task-card">
+            <div class="t-label">DevOps</div>
+            <div class="t-title">Frontend Deployment</div>
+            <div class="t-desc">Build React app with Vite. Deploy to Vercel or Netlify. Set VITE_API_BASE_URL to production backend URL.</div>
+          </div>
+          <div class="task-card">
+            <div class="t-label">Docs</div>
+            <div class="t-title">README & Documentation</div>
+            <div class="t-desc">Write README with setup instructions, env variables, and API overview. Add Swagger/OpenAPI docs to Spring Boot.</div>
+          </div>
+          <div class="task-card">
+            <div class="t-label">Review</div>
+            <div class="t-title">Final Review</div>
+            <div class="t-desc">Demo walkthrough. Verify all features work in production. Tag release v1.0.0 in Git.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FOLDER STRUCTURE -->
+  <div class="section-title">✦ Project Folder Structure</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:40px">
+
+    <div>
+      <div style="font-size:0.8rem;font-weight:600;margin-bottom:8px;color:var(--muted)">🍃 Backend (Spring Boot)</div>
+      <div class="folder-tree">
+<span class="ft-dir">fintrack-backend/</span>
+├── <span class="ft-dir">src/main/java/com/fintrack/</span>
+│   ├── <span class="ft-dir">config/</span>           <span class="ft-comment"># SecurityConfig, JwtConfig</span>
+│   ├── <span class="ft-dir">controller/</span>       <span class="ft-comment"># REST controllers</span>
+│   │   ├── <span class="ft-file">AuthController.java</span>
+│   │   ├── <span class="ft-file">CategoryController.java</span>
+│   │   ├── <span class="ft-file">TransactionController.java</span>
+│   │   ├── <span class="ft-file">GoalController.java</span>
+│   │   └── <span class="ft-file">DashboardController.java</span>
+│   ├── <span class="ft-dir">dto/</span>              <span class="ft-comment"># Request/Response DTOs</span>
+│   ├── <span class="ft-dir">entity/</span>           <span class="ft-comment"># JPA Entities</span>
+│   │   ├── <span class="ft-file">User.java</span>
+│   │   ├── <span class="ft-file">BudgetCategory.java</span>
+│   │   ├── <span class="ft-file">Transaction.java</span>
+│   │   └── <span class="ft-file">BudgetGoal.java</span>
+│   ├── <span class="ft-dir">repository/</span>       <span class="ft-comment"># JPA Repositories</span>
+│   ├── <span class="ft-dir">service/</span>          <span class="ft-comment"># Business Logic</span>
+│   ├── <span class="ft-dir">security/</span>         <span class="ft-comment"># JWT filter & util</span>
+│   └── <span class="ft-file">FintrackApplication.java</span>
+├── <span class="ft-dir">src/main/resources/</span>
+│   ├── <span class="ft-file">application.properties</span>
+│   └── <span class="ft-file">schema.sql</span>
+└── <span class="ft-file">pom.xml</span>
+      </div>
+    </div>
+
+    <div>
+      <div style="font-size:0.8rem;font-weight:600;margin-bottom:8px;color:var(--muted)">⚛ Frontend (React + React Router)</div>
+      <div class="folder-tree">
+<span class="ft-dir">fintrack-frontend/</span>
+├── <span class="ft-dir">src/</span>
+│   ├── <span class="ft-dir">api/</span>              <span class="ft-comment"># Axios API calls</span>
+│   │   ├── <span class="ft-file">auth.js</span>
+│   │   ├── <span class="ft-file">categories.js</span>
+│   │   ├── <span class="ft-file">transactions.js</span>
+│   │   └── <span class="ft-file">goals.js</span>
+│   ├── <span class="ft-dir">components/</span>       <span class="ft-comment"># Reusable UI</span>
+│   │   ├── <span class="ft-file">Sidebar.jsx</span>
+│   │   ├── <span class="ft-file">StatCard.jsx</span>
+│   │   ├── <span class="ft-file">BudgetCard.jsx</span>
+│   │   ├── <span class="ft-file">GoalCard.jsx</span>
+│   │   └── <span class="ft-file">TransactionRow.jsx</span>
+│   ├── <span class="ft-dir">context/</span>
+│   │   └── <span class="ft-file">AuthContext.jsx</span>
+│   ├── <span class="ft-dir">hooks/</span>
+│   │   ├── <span class="ft-file">useAuth.js</span>
+│   │   └── <span class="ft-file">useDashboard.js</span>
+│   ├── <span class="ft-dir">pages/</span>
+│   │   ├── <span class="ft-file">LoginPage.jsx</span>
+│   │   ├── <span class="ft-file">RegisterPage.jsx</span>
+│   │   ├── <span class="ft-file">DashboardPage.jsx</span>
+│   │   ├── <span class="ft-file">CategoriesPage.jsx</span>
+│   │   ├── <span class="ft-file">TransactionsPage.jsx</span>
+│   │   └── <span class="ft-file">GoalsPage.jsx</span>
+│   ├── <span class="ft-dir">router/</span>
+│   │   └── <span class="ft-file">AppRouter.jsx</span>   <span class="ft-comment"># React Router config</span>
+│   └── <span class="ft-file">main.jsx</span>
+└── <span class="ft-file">vite.config.js</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- API ENDPOINTS -->
+  <div class="section-title">✦ REST API Endpoints</div>
+  <div class="api-table" style="margin-bottom:40px">
+    <table>
+      <thead>
+        <tr>
+          <th>Method</th>
+          <th>Endpoint</th>
+          <th>Description</th>
+          <th>Auth</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="method m-post">POST</span></td><td class="endpoint">/api/auth/register</td><td>Register new user</td><td>❌</td></tr>
+        <tr><td><span class="method m-post">POST</span></td><td class="endpoint">/api/auth/login</td><td>Login & get JWT</td><td>❌</td></tr>
+        <tr><td><span class="method m-get">GET</span></td><td class="endpoint">/api/categories</td><td>Get all user's categories</td><td>✅</td></tr>
+        <tr><td><span class="method m-post">POST</span></td><td class="endpoint">/api/categories</td><td>Create custom budget category</td><td>✅</td></tr>
+        <tr><td><span class="method m-put">PUT</span></td><td class="endpoint">/api/categories/{id}</td><td>Update budget category</td><td>✅</td></tr>
+        <tr><td><span class="method m-delete">DELETE</span></td><td class="endpoint">/api/categories/{id}</td><td>Delete budget category</td><td>✅</td></tr>
+        <tr><td><span class="method m-get">GET</span></td><td class="endpoint">/api/transactions</td><td>Get transactions (filter by month/category)</td><td>✅</td></tr>
+        <tr><td><span class="method m-post">POST</span></td><td class="endpoint">/api/transactions</td><td>Add new transaction</td><td>✅</td></tr>
+        <tr><td><span class="method m-put">PUT</span></td><td class="endpoint">/api/transactions/{id}</td><td>Update transaction</td><td>✅</td></tr>
+        <tr><td><span class="method m-delete">DELETE</span></td><td class="endpoint">/api/transactions/{id}</td><td>Delete transaction</td><td>✅</td></tr>
+        <tr><td><span class="method m-get">GET</span></td><td class="endpoint">/api/goals</td><td>Get all budget goals</td><td>✅</td></tr>
+        <tr><td><span class="method m-post">POST</span></td><td class="endpoint">/api/goals</td><td>Create budget goal</td><td>✅</td></tr>
+        <tr><td><span class="method m-put">PUT</span></td><td class="endpoint">/api/goals/{id}</td><td>Update goal / add progress</td><td>✅</td></tr>
+        <tr><td><span class="method m-delete">DELETE</span></td><td class="endpoint">/api/goals/{id}</td><td>Delete goal</td><td>✅</td></tr>
+        <tr><td><span class="method m-get">GET</span></td><td class="endpoint">/api/dashboard/summary</td><td>Get dashboard summary stats</td><td>✅</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- REACT ROUTER STRUCTURE -->
+  <div class="section-title">✦ React Router Structure</div>
+  <div class="comp-arch" style="margin-bottom:40px">
+    <div style="font-size:0.8rem;color:var(--muted);margin-bottom:16px">AppRouter.jsx — Route Hierarchy</div>
+    <div class="comp-row">
+      <div class="comp-box page"><span class="cb-label">Root</span>App (BrowserRouter)</div>
+      <div class="comp-arrow">→</div>
+      <div class="comp-box page"><span class="cb-label">Layout</span>AppLayout (Sidebar + Outlet)</div>
+      <div class="comp-arrow">→</div>
+      <div class="comp-box hook"><span class="cb-label">Guard</span>PrivateRoute</div>
+    </div>
+    <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
+      <div class="comp-box page"><span class="cb-label">Route /</span>DashboardPage</div>
+      <div class="comp-box page"><span class="cb-label">Route /categories</span>CategoriesPage</div>
+      <div class="comp-box page"><span class="cb-label">Route /transactions</span>TransactionsPage</div>
+      <div class="comp-box page"><span class="cb-label">Route /goals</span>GoalsPage</div>
+      <div class="comp-box component"><span class="cb-label">Route /login</span>LoginPage</div>
+      <div class="comp-box component"><span class="cb-label">Route /register</span>RegisterPage</div>
+    </div>
+    <div style="margin-top:14px;font-size:0.78rem;color:var(--muted)">
+      <span class="chip blue">Page</span> = Route-level component &nbsp;
+      <span class="chip">Component</span> = Reusable UI component &nbsp;
+      <span class="chip" style="background:#FEF9C3;border-color:#F9E79F">Hook/Guard</span> = Logic wrapper
+    </div>
+  </div>
+
+</main>
+</div>
+
+<!-- ══════════════════════════════════════════
+     TAB 2 — MOCKUPS
+══════════════════════════════════════════ -->
+
+<style>
+/* ── HappyTracker Mockup Design System (White/Light) ── */
+.ht-wrap { background: #F0F2F5; min-height: calc(100vh - 64px); font-family: 'DM Sans', sans-serif; }
+
+/* nav bar for mockup screens */
+.ht-mock-nav {
+  background: #fff;
+  border-bottom: 1px solid #E5E7EB;
+  padding: 0 32px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 52px;
+  position: sticky;
+  top: 64px;
+  z-index: 90;
+  overflow-x: auto;
+}
+
+.ht-mock-nav-btn {
+  background: none;
+  border: none;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.8rem;
+  color: #6B7280;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+  font-weight: 500;
+}
+.ht-mock-nav-btn.active, .ht-mock-nav-btn:hover { background: #EEF2FF; color: #4F46E5; }
+
+.ht-screen { display: none; padding: 28px 32px; }
+.ht-screen.active { display: block; }
+
+.ht-screen-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #9CA3AF;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+/* Browser chrome */
+.ht-chrome {
+  background: #E9EAEC;
+  border-radius: 12px 12px 0 0;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 980px;
+  margin: 0 auto;
+}
+.ht-chrome-dots { display: flex; gap: 5px; }
+.ht-d { width: 10px; height: 10px; border-radius: 50%; }
+.ht-d-r { background: #FF5F57; }
+.ht-d-y { background: #FEBC2E; }
+.ht-d-g { background: #28C840; }
+.ht-url-bar {
+  background: #fff;
+  border-radius: 5px;
+  padding: 4px 14px;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem;
+  color: #6B7280;
+  flex: 1;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+/* App shell */
+.ht-shell {
+  display: flex;
+  max-width: 980px;
+  margin: 0 auto;
+  border-radius: 0 0 12px 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.12);
+  height: 580px;
+}
+
+/* Sidebar */
+.ht-sidebar {
+  width: 216px;
+  background: #fff;
+  border-right: 1px solid #F3F4F6;
+  padding: 20px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex-shrink: 0;
+}
+.ht-logo {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.1rem;
+  color: #4F46E5;
+  padding: 4px 10px;
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.ht-logo-emoji { font-size: 1rem; }
+.ht-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 10px;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  color: #6B7280;
+  cursor: pointer;
+  font-weight: 500;
+}
+.ht-nav-item.active { background: #EEF2FF; color: #4F46E5; font-weight: 600; }
+.ht-nav-item:hover:not(.active) { background: #F9FAFB; }
+.ht-nav-icon { font-size: 0.9rem; width: 18px; text-align: center; }
+.ht-sidebar-divider { height: 1px; background: #F3F4F6; margin: 8px 0; }
+.ht-sidebar-section { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.09em; color: #D1D5DB; padding: 4px 10px; font-weight: 600; }
+.ht-user-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: #F9FAFB;
+  margin-top: auto;
+  cursor: pointer;
+}
+.ht-avatar {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #818CF8, #4F46E5);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.72rem;
+  color: white;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.ht-user-name { font-size: 0.78rem; font-weight: 600; color: #374151; }
+.ht-user-plan { font-size: 0.65rem; color: #9CA3AF; }
+
+/* Main area */
+.ht-main { flex: 1; background: #F8F9FB; display: flex; flex-direction: column; overflow: hidden; }
+.ht-topbar {
+  background: #fff;
+  border-bottom: 1px solid #F3F4F6;
+  padding: 12px 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+.ht-topbar-title { font-size: 0.92rem; font-weight: 700; color: #111827; }
+.ht-topbar-sub { font-size: 0.72rem; color: #9CA3AF; margin-top: 1px; }
+.ht-topbar-actions { display: flex; gap: 8px; align-items: center; }
+
+/* Buttons */
+.ht-btn {
+  border: none;
+  padding: 7px 14px;
+  border-radius: 7px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.76rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.ht-btn-primary { background: #4F46E5; color: #fff; }
+.ht-btn-ghost { background: #F3F4F6; color: #374151; }
+.ht-btn-outline { background: #fff; color: #4F46E5; border: 1px solid #C7D2FE; }
+.ht-btn-danger { background: #FEF2F2; color: #DC2626; }
+.ht-btn-sm { padding: 4px 10px; font-size: 0.7rem; }
+.ht-btn-icon { padding: 6px 8px; }
+
+/* Content */
+.ht-content { flex: 1; padding: 18px 22px; overflow-y: auto; }
+
+/* Stat cards */
+.ht-stat-row { display: flex; gap: 12px; margin-bottom: 16px; }
+.ht-stat {
+  flex: 1;
+  background: #fff;
+  border: 1px solid #F3F4F6;
+  border-radius: 10px;
+  padding: 14px 16px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+.ht-stat-label { font-size: 0.68rem; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 6px; font-weight: 600; }
+.ht-stat-val { font-size: 1.4rem; font-weight: 700; color: #111827; }
+.ht-stat-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-top: 5px;
+}
+.ht-up { background: #D1FAE5; color: #065F46; }
+.ht-down { background: #FEE2E2; color: #991B1B; }
+.ht-neutral { background: #EEF2FF; color: #4338CA; }
+.ht-stat-icon {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+}
+
+/* Cards */
+.ht-card {
+  background: #fff;
+  border: 1px solid #F3F4F6;
+  border-radius: 10px;
+  padding: 16px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+.ht-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+.ht-card-title { font-size: 0.8rem; font-weight: 700; color: #374151; }
+.ht-card-action { font-size: 0.72rem; color: #4F46E5; cursor: pointer; font-weight: 500; }
+
+/* Progress bar */
+.ht-bar { height: 6px; background: #F3F4F6; border-radius: 3px; overflow: hidden; flex: 1; }
+.ht-bar-fill { height: 100%; border-radius: 3px; }
+.ht-fill-indigo { background: #4F46E5; }
+.ht-fill-emerald { background: #10B981; }
+.ht-fill-amber { background: #F59E0B; }
+.ht-fill-red { background: #EF4444; }
+.ht-fill-sky { background: #0EA5E9; }
+.ht-fill-violet { background: #8B5CF6; }
+.ht-fill-pink { background: #EC4899; }
+.ht-fill-teal { background: #14B8A6; }
+
+/* Budget progress item */
+.ht-bp-item { display: flex; align-items: center; gap: 8px; margin-bottom: 11px; }
+.ht-bp-item:last-child { margin-bottom: 0; }
+.ht-bp-name { font-size: 0.78rem; color: #374151; flex: 1; font-weight: 500; }
+.ht-bp-pct { font-size: 0.72rem; color: #6B7280; min-width: 34px; text-align: right; }
+.ht-bp-over { color: #EF4444; font-weight: 700; }
+
+/* Transactions */
+.ht-tx { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid #F9FAFB; }
+.ht-tx:last-child { border-bottom: none; }
+.ht-tx-icon { width: 32px; height: 32px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; flex-shrink: 0; }
+.ht-tx-info { flex: 1; }
+.ht-tx-name { font-size: 0.8rem; font-weight: 600; color: #111827; }
+.ht-tx-meta { font-size: 0.68rem; color: #9CA3AF; }
+.ht-tx-amount { font-size: 0.82rem; font-weight: 700; }
+.ht-income { color: #10B981; }
+.ht-expense { color: #EF4444; }
+
+/* Pill badges */
+.ht-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 0.66rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+.ht-pill-green { background: #D1FAE5; color: #065F46; }
+.ht-pill-amber { background: #FEF3C7; color: #92400E; }
+.ht-pill-red { background: #FEE2E2; color: #991B1B; }
+.ht-pill-indigo { background: #EEF2FF; color: #4338CA; }
+.ht-pill-sky { background: #E0F2FE; color: #075985; }
+.ht-pill-violet { background: #F5F3FF; color: #5B21B6; }
+.ht-pill-gray { background: #F3F4F6; color: #374151; }
+
+/* Grid */
+.ht-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.ht-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+/* Goal card */
+.ht-goal {
+  background: #fff;
+  border: 1px solid #F3F4F6;
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+.ht-goal:last-child { margin-bottom: 0; }
+.ht-goal-row { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 8px; }
+.ht-goal-name { font-size: 0.85rem; font-weight: 700; color: #111827; }
+.ht-goal-sub { font-size: 0.7rem; color: #9CA3AF; margin-top: 2px; }
+.ht-goal-amounts { display: flex; justify-content: space-between; margin-bottom: 7px; }
+.ht-goal-cur { font-size: 1.05rem; font-weight: 700; color: #111827; }
+.ht-goal-target { font-size: 0.75rem; color: #6B7280; align-self: flex-end; }
+.ht-goal-foot { display: flex; justify-content: space-between; margin-top: 6px; font-size: 0.7rem; color: #9CA3AF; }
+
+/* Donut chart (SVG-based) */
+.ht-donut-wrap { display: flex; align-items: center; gap: 14px; }
+.ht-donut-legend { flex: 1; }
+.ht-legend-row { display: flex; align-items: center; gap: 7px; margin-bottom: 8px; font-size: 0.75rem; }
+.ht-legend-row:last-child { margin-bottom: 0; }
+.ht-legend-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+.ht-legend-name { flex: 1; color: #374151; font-weight: 500; }
+.ht-legend-val { color: #111827; font-weight: 700; }
+.ht-legend-pct { color: #9CA3AF; font-size: 0.68rem; }
+
+/* Bar chart (CSS) */
+.ht-bar-chart { display: flex; align-items: flex-end; gap: 8px; height: 80px; }
+.ht-bar-col { display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
+.ht-bar-col-bar { width: 100%; border-radius: 4px 4px 0 0; transition: height 0.3s; }
+.ht-bar-col-label { font-size: 0.62rem; color: #9CA3AF; }
+
+/* Table */
+.ht-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+.ht-table th { text-align: left; padding: 8px 12px; color: #6B7280; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.07em; border-bottom: 1px solid #F3F4F6; background: #FAFAFA; font-weight: 600; }
+.ht-table td { padding: 10px 12px; border-bottom: 1px solid #F9FAFB; vertical-align: middle; }
+.ht-table tr:last-child td { border-bottom: none; }
+.ht-table tr:hover td { background: #FAFAFA; }
+
+/* Modal */
+.ht-modal-bg {
+  background: rgba(17,24,39,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 580px;
+  position: relative;
+  overflow: hidden;
+}
+.ht-modal-blur {
+  position: absolute;
+  inset: 0;
+  background: #F8F9FB;
+  opacity: 0.7;
+}
+.ht-modal {
+  background: #fff;
+  border: 1px solid #E5E7EB;
+  border-radius: 14px;
+  padding: 26px 28px;
+  width: 380px;
+  position: relative;
+  z-index: 2;
+  box-shadow: 0 12px 48px rgba(0,0,0,0.14);
+}
+.ht-modal-title { font-size: 1rem; font-weight: 700; color: #111827; margin-bottom: 2px; }
+.ht-modal-sub { font-size: 0.76rem; color: #6B7280; margin-bottom: 18px; }
+.ht-form-group { margin-bottom: 13px; }
+.ht-label { display: block; font-size: 0.7rem; font-weight: 600; color: #374151; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.06em; }
+.ht-input {
+  width: 100%;
+  background: #F9FAFB;
+  border: 1px solid #E5E7EB;
+  border-radius: 7px;
+  padding: 9px 11px;
+  font-size: 0.82rem;
+  color: #111827;
+  font-family: 'DM Sans', sans-serif;
+}
+.ht-input:focus { border-color: #818CF8; outline: none; }
+.ht-input-row { display: flex; gap: 8px; }
+.ht-swatches { display: flex; gap: 7px; flex-wrap: wrap; margin-top: 5px; }
+.ht-swatch { width: 24px; height: 24px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; }
+.ht-swatch.sel { border-color: #111827; }
+.ht-modal-footer { display: flex; gap: 8px; margin-top: 18px; }
+.ht-modal-footer .ht-btn { flex: 1; }
+
+/* Notification dot */
+.ht-notif-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: #EF4444;
+  display: inline-block;
+  margin-left: 4px;
+  vertical-align: top;
+  margin-top: 2px;
+}
+
+/* Alert banner */
+.ht-alert {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  margin-bottom: 12px;
+}
+.ht-alert-warn { background: #FFFBEB; border: 1px solid #FDE68A; color: #92400E; }
+.ht-alert-info { background: #EFF6FF; border: 1px solid #BFDBFE; color: #1E40AF; }
+.ht-alert-success { background: #ECFDF5; border: 1px solid #A7F3D0; color: #065F46; }
+
+/* Summary row */
+.ht-summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #F9FAFB;
+  font-size: 0.8rem;
+}
+.ht-summary-row:last-child { border-bottom: none; }
+
+/* Profile / settings */
+.ht-profile-hero {
+  background: linear-gradient(120deg, #4F46E5 0%, #818CF8 100%);
+  border-radius: 10px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 14px;
+  color: white;
+}
+.ht-profile-avatar {
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.25);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+.ht-setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #F3F4F6;
+}
+.ht-setting-row:last-child { border-bottom: none; }
+.ht-toggle {
+  width: 34px; height: 18px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  padding: 2px;
+  cursor: pointer;
+}
+.ht-toggle-on { background: #4F46E5; justify-content: flex-end; }
+.ht-toggle-off { background: #E5E7EB; justify-content: flex-start; }
+.ht-toggle-knob { width: 14px; height: 14px; border-radius: 50%; background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+
+/* Mini sparkline */
+.ht-spark { display: flex; align-items: flex-end; gap: 2px; height: 28px; }
+.ht-spark-bar { width: 4px; border-radius: 2px 2px 0 0; }
+
+/* Reports bar chart */
+.ht-rep-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.ht-rep-month { font-size: 0.72rem; color: #6B7280; width: 28px; }
+.ht-rep-bars { display: flex; gap: 3px; flex: 1; align-items: flex-end; height: 20px; }
+.ht-rep-bar { border-radius: 3px 3px 0 0; }
+.ht-rep-total { font-size: 0.72rem; font-weight: 600; color: #111827; min-width: 50px; text-align: right; }
+
+/* Notification panel */
+.ht-notif-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid #F9FAFB;
+}
+.ht-notif-item:last-child { border-bottom: none; }
+.ht-notif-icon { width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.78rem; flex-shrink: 0; }
+.ht-notif-title { font-size: 0.78rem; font-weight: 600; color: #111827; }
+.ht-notif-desc { font-size: 0.72rem; color: #6B7280; margin-top: 1px; }
+.ht-notif-time { font-size: 0.65rem; color: #D1D5DB; margin-top: 2px; }
+
+/* Search bar */
+.ht-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #F3F4F6;
+  border-radius: 7px;
+  padding: 7px 12px;
+  font-size: 0.78rem;
+  color: #9CA3AF;
+  border: 1px solid transparent;
+}
+</style>
+
+<div class="tab-content" id="tab-mockups">
+  <div class="ht-wrap">
+    <!-- HappyTracker Mockup Nav -->
+    <div class="ht-mock-nav">
+      <button class="ht-mock-nav-btn active" onclick="switchMockup('mk-dashboard', this)">📊 Dashboard</button>
+      <button class="ht-mock-nav-btn" onclick="switchMockup('mk-categories', this)">🗂️ Categories</button>
+      <button class="ht-mock-nav-btn" onclick="switchMockup('mk-add-budget', this)">➕ Create Budget</button>
+      <button class="ht-mock-nav-btn" onclick="switchMockup('mk-goals', this)">🎯 Goals</button>
+      <button class="ht-mock-nav-btn" onclick="switchMockup('mk-transactions', this)">💸 Transactions</button>
+      <button class="ht-mock-nav-btn" onclick="switchMockup('mk-reports', this)">📅 Reports</button>
+      <button class="ht-mock-nav-btn" onclick="switchMockup('mk-notifications', this)">🔔 Notifications</button>
+      <button class="ht-mock-nav-btn" onclick="switchMockup('mk-settings', this)">⚙️ Settings</button>
+      <button class="ht-mock-nav-btn" onclick="switchMockup('mk-login', this)">🔐 Login</button>
+    </div>
+
+    <!-- ════ SCREEN 1: DASHBOARD ════ -->
+    <div class="ht-screen active" id="mk-dashboard">
+      <div class="ht-screen-label">Screen 1 of 9 — Dashboard</div>
+      <div class="ht-chrome">
+        <div class="ht-chrome-dots"><div class="ht-d ht-d-r"></div><div class="ht-d ht-d-y"></div><div class="ht-d ht-d-g"></div></div>
+        <div class="ht-url-bar">app.happytracker.io / dashboard</div>
+      </div>
+      <div class="ht-shell">
+        <!-- Sidebar -->
+        <div class="ht-sidebar">
+          <div class="ht-logo"><div class="ht-logo-emoji">😊</div>HappyTracker</div>
+          <div class="ht-sidebar-section">Main</div>
+          <div class="ht-nav-item active"><span class="ht-nav-icon">📊</span>Dashboard</div>
+          <div class="ht-nav-item"><span class="ht-nav-icon">💸</span>Transactions</div>
+          <div class="ht-nav-item"><span class="ht-nav-icon">🗂️</span>Budgets</div>
+          <div class="ht-nav-item"><span class="ht-nav-icon">🎯</span>Goals</div>
+          <div class="ht-nav-item"><span class="ht-nav-icon">📅</span>Reports</div>
+          <div class="ht-sidebar-divider"></div>
+          <div class="ht-sidebar-section">Account</div>
+          <div class="ht-nav-item"><span class="ht-nav-icon">🔔</span>Notifications<span class="ht-notif-dot"></span></div>
+          <div class="ht-nav-item"><span class="ht-nav-icon">⚙️</span>Settings</div>
+          <div class="ht-user-pill">
+            <div class="ht-avatar">JP</div>
+            <div><div class="ht-user-name">John Paul V.</div><div class="ht-user-plan">Pro Plan</div></div>
+          </div>
+        </div>
+        <!-- Main -->
+        <div class="ht-main">
+          <div class="ht-topbar">
+            <div>
+              <div class="ht-topbar-title">Good morning, John Paul 👋</div>
+              <div class="ht-topbar-sub">Here's your financial summary for March 2026</div>
+            </div>
+            <div class="ht-topbar-actions">
+              <div class="ht-search">🔍 &nbsp;Search...</div>
+              <button class="ht-btn ht-btn-ghost ht-btn-sm">Mar 2026 ▾</button>
+              <button class="ht-btn ht-btn-primary ht-btn-sm">+ Add Transaction</button>
+            </div>
+          </div>
+          <div class="ht-content">
+            <!-- Alert -->
+            <div class="ht-alert ht-alert-warn">⚠️ <span><strong>Utilities</strong> exceeded monthly limit by ₱200. Consider reviewing your plan.</span></div>
+            <!-- Stat row -->
+            <div class="ht-stat-row">
+              <div class="ht-stat">
+                <div class="ht-stat-icon" style="background:#EEF2FF">💰</div>
+                <div class="ht-stat-label">Total Income</div>
+                <div class="ht-stat-val">₱48,500</div>
+                <div class="ht-stat-badge ht-up">↑ 5.2% vs last month</div>
+              </div>
+              <div class="ht-stat">
+                <div class="ht-stat-icon" style="background:#FEF2F2">💳</div>
+                <div class="ht-stat-label">Total Expenses</div>
+                <div class="ht-stat-val">₱31,240</div>
+                <div class="ht-stat-badge ht-down">↑ 8.1% vs last month</div>
+              </div>
+              <div class="ht-stat">
+                <div class="ht-stat-icon" style="background:#ECFDF5">🏦</div>
+                <div class="ht-stat-label">Net Savings</div>
+                <div class="ht-stat-val">₱17,260</div>
+                <div class="ht-stat-badge ht-up">35.6% rate</div>
+              </div>
+              <div class="ht-stat">
+                <div class="ht-stat-icon" style="background:#F5F3FF">🎯</div>
+                <div class="ht-stat-label">Goals Progress</div>
+                <div class="ht-stat-val">3 Active</div>
+                <div class="ht-stat-badge ht-neutral">1 completed</div>
+              </div>
+            </div>
+            <!-- Main grid -->
+            <div class="ht-grid-2" style="margin-bottom:12px">
+              <!-- Budget Progress -->
+              <div class="ht-card">
+                <div class="ht-card-header">
+                  <div class="ht-card-title">Budget Progress</div>
+                  <div class="ht-card-action">View All →</div>
+                </div>
+                <div class="ht-bp-item">
+                  <span style="font-size:0.85rem">🍔</span>
+                  <div class="ht-bp-name">Food & Dining</div>
+                  <div class="ht-bar"><div class="ht-bar-fill ht-fill-amber" style="width:78%"></div></div>
+                  <div class="ht-bp-pct">78%</div>
+                </div>
+                <div class="ht-bp-item">
+                  <span style="font-size:0.85rem">🚌</span>
+                  <div class="ht-bp-name">Transport</div>
+                  <div class="ht-bar"><div class="ht-bar-fill ht-fill-emerald" style="width:45%"></div></div>
+                  <div class="ht-bp-pct">45%</div>
+                </div>
+                <div class="ht-bp-item">
+                  <span style="font-size:0.85rem">💡</span>
+                  <div class="ht-bp-name">Utilities</div>
+                  <div class="ht-bar"><div class="ht-bar-fill ht-fill-red" style="width:100%"></div></div>
+                  <div class="ht-bp-pct ht-bp-over">104%</div>
+                </div>
+                <div class="ht-bp-item">
+                  <span style="font-size:0.85rem">✈️</span>
+                  <div class="ht-bp-name">Travel</div>
+                  <div class="ht-bar"><div class="ht-bar-fill ht-fill-sky" style="width:30%"></div></div>
+                  <div class="ht-bp-pct">30%</div>
+                </div>
+                <div class="ht-bp-item">
+                  <span style="font-size:0.85rem">🎮</span>
+                  <div class="ht-bp-name">Entertainment</div>
+                  <div class="ht-bar"><div class="ht-bar-fill ht-fill-violet" style="width:60%"></div></div>
+                  <div class="ht-bp-pct">60%</div>
+                </div>
+              </div>
+              <!-- Spending donut -->
+              <div class="ht-card">
+                <div class="ht-card-header">
+                  <div class="ht-card-title">Spending Breakdown</div>
+                  <div class="ht-card-action">March 2026</div>
+                </div>
+                <div class="ht-donut-wrap">
+                  <svg width="100" height="100" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="36" fill="none" stroke="#F3F4F6" stroke-width="16"/>
+                    <circle cx="50" cy="50" r="36" fill="none" stroke="#4F46E5" stroke-width="16" stroke-dasharray="100 126" stroke-dashoffset="0" transform="rotate(-90 50 50)"/>
+                    <circle cx="50" cy="50" r="36" fill="none" stroke="#10B981" stroke-width="16" stroke-dasharray="50 176" stroke-dashoffset="-100" transform="rotate(-90 50 50)"/>
+                    <circle cx="50" cy="50" r="36" fill="none" stroke="#F59E0B" stroke-width="16" stroke-dasharray="40 186" stroke-dashoffset="-150" transform="rotate(-90 50 50)"/>
+                    <circle cx="50" cy="50" r="36" fill="none" stroke="#EF4444" stroke-width="16" stroke-dasharray="36 190" stroke-dashoffset="-190" transform="rotate(-90 50 50)"/>
+                    <text x="50" y="53" text-anchor="middle" font-size="9" font-weight="700" fill="#111827">₱31,240</text>
+                  </svg>
+                  <div class="ht-donut-legend">
+                    <div class="ht-legend-row"><div class="ht-legend-dot" style="background:#4F46E5"></div><div class="ht-legend-name">Food</div><div class="ht-legend-val">₱9,800</div><div class="ht-legend-pct">31%</div></div>
+                    <div class="ht-legend-row"><div class="ht-legend-dot" style="background:#10B981"></div><div class="ht-legend-name">Transport</div><div class="ht-legend-val">₱4,200</div><div class="ht-legend-pct">13%</div></div>
+                    <div class="ht-legend-row"><div class="ht-legend-dot" style="background:#F59E0B"></div><div class="ht-legend-name">Utilities</div><div class="ht-legend-val">₱5,200</div><div class="ht-legend-pct">17%</div></div>
+                    <div class="ht-legend-row"><div class="ht-legend-dot" style="background:#EF4444"></div><div class="ht-legend-name">Other</div><div class="ht-legend-val">₱12,040</div><div class="ht-legend-pct">39%</div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Recent Transactions -->
+            <div class="ht-card">
+              <div class="ht-card-header">
+                <div class="ht-card-title">Recent Transactions</div>
+                <div class="ht-card-action">See all →</div>
+              </div>
+              <div class="ht-tx">
+                <div class="ht-tx-icon" style="background:#ECFDF5">💰</div>
+                <div class="ht-tx-info"><div class="ht-tx-name">Monthly Salary</div><div class="ht-tx-meta">Mar 1, 2026 · Income</div></div>
+                <span class="ht-pill ht-pill-green">Income</span>
+                <div class="ht-tx-amount ht-income" style="margin-left:10px">+₱48,500</div>
+              </div>
+              <div class="ht-tx">
+                <div class="ht-tx-icon" style="background:#FEF3C7">🍔</div>
+                <div class="ht-tx-info"><div class="ht-tx-name">Jollibee Delivery</div><div class="ht-tx-meta">Mar 12 · Food & Dining</div></div>
+                <span class="ht-pill ht-pill-amber">Food</span>
+                <div class="ht-tx-amount ht-expense" style="margin-left:10px">-₱380</div>
+              </div>
+              <div class="ht-tx">
+                <div class="ht-tx-icon" style="background:#FEF2F2">💡</div>
+                <div class="ht-tx-info"><div class="ht-tx-name">Meralco Electric Bill</div><div class="ht-tx-meta">Mar 11 · Utilities</div></div>
+                <span class="ht-pill ht-pill-red">Utilities</span>
+                <div class="ht-tx-amount ht-expense" style="margin-left:10px">-₱2,100</div>
+              </div>
+              <div class="ht-tx">
+                <div class="ht-tx-icon" style="background:#EFF6FF">✈️</div>
+                <div class="ht-tx-info"><div class="ht-tx-name">Cebu Pacific Ticket</div><div class="ht-tx-meta">Mar 10 · Travel</div></div>
+                <span class="ht-pill ht-pill-sky">Travel</span>
+                <div class="ht-tx-amount ht-expense" style="margin-left:10px">-₱3,500</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ SCREEN 2: CATEGORIES ════ -->
+    <div class="ht-screen" id="mk-categories">
+      <div class="ht-screen-label">Screen 2 of 9 — Budget Categories</div>
+      <div class="ht-chrome">
+        <div class="ht-chrome-dots"><div class="ht-d ht-d-r"></div><div class="ht-d ht-d-y"></div><div class="ht-d ht-d-g"></div></div>
+        <div class="ht-url-bar">app.happytracker.io / budgets</div>
+      </div>
+      <div class="ht-shell">
+        <div class="ht-sidebar">
+          <div class="ht-logo"><div class="ht-logo-emoji">😊</div>HappyTracker</div>
+          <div class="ht-sidebar-section">Main</div>
+          <div class="ht-nav-item"><span class="ht-nav-icon">📊</span>Dashboard</div>
+          <div class="ht-nav-item"><span class="ht-nav-icon">💸</span>Transactions</div>
+          <div class="ht-nav-item active"><span class="ht-nav-icon">🗂️</span>Budgets</div>
+          <div class="ht-nav-item"><span class="ht-nav-icon">🎯</span>Goals</div>
+          <div class="ht-nav-item"><span class="ht-nav-icon">📅</span>Reports</div>
+          <div class="ht-sidebar-divider"></div>
+          <div class="ht-nav-item"><span class="ht-nav-icon">🔔</span>Notifications<span class="ht-notif-dot"></span></div>
+          <div class="ht-nav-item"><span class="ht-nav-icon">⚙️</span>Settings</div>
+          <div class="ht-user-pill">
+            <div class="ht-avatar">JP</div>
+            <div><div class="ht-user-name">John Paul V.</div><div class="ht-user-plan">Pro Plan</div></div>
+          </div>
+        </div>
+        <div class="ht-main">
+          <div class="ht-topbar">
+            <div>
+              <div class="ht-topbar-title">Budget Categories</div>
+              <div class="ht-topbar-sub">5 custom categories · March 2026</div>
+            </div>
+            <div class="ht-topbar-actions">
+              <button class="ht-btn ht-btn-ghost ht-btn-sm">Sort by: Name ▾</button>
+              <button class="ht-btn ht-btn-primary ht-btn-sm">+ New Category</button>
+            </div>
+          </div>
+          <div class="ht-content">
+            <!-- Summary bar -->
+            <div class="ht-alert ht-alert-info">📊 Monthly budget: <strong>₱45,000</strong> total allocated · ₱31,240 spent · ₱13,760 remaining</div>
+            <div class="ht-grid-3">
+              <!-- Category Cards -->
+              <div class="ht-card" style="border-top:3px solid #10B981">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
+                  <div style="font-size:1.6rem">🍔</div>
+                  <span class="ht-pill ht-pill-green">On Track</span>
+                </div>
+                <div style="font-size:0.9rem;font-weight:700;color:#111827;margin-bottom:2px">Food & Dining</div>
+                <div style="font-size:0.72rem;color:#9CA3AF;margin-bottom:10px">₱7,800 of ₱10,000</div>
+                <div class="ht-bar" style="margin-bottom:8px"><div class="ht-bar-fill ht-fill-emerald" style="width:78%"></div></div>
+                <div style="display:flex;justify-content:space-between;font-size:0.68rem;color:#9CA3AF;margin-bottom:10px"><span>78% used</span><span>₱2,200 left</span></div>
+                <div style="display:flex;gap:6px">
+                  <button class="ht-btn ht-btn-ghost ht-btn-sm" style="flex:1">✏️ Edit</button>
+                  <button class="ht-btn ht-btn-danger ht-btn-sm">🗑️</button>
+                </div>
+              </div>
+              <div class="ht-card" style="border-top:3px solid #EF4444">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
+                  <div style="font-size:1.6rem">💡</div>
+                  <span class="ht-pill ht-pill-red">Over Limit</span>
+                </div>
+                <div style="font-size:0.9rem;font-weight:700;color:#111827;margin-bottom:2px">Utilities</div>
+                <div style="font-size:0.72rem;color:#9CA3AF;margin-bottom:10px">₱5,200 of ₱5,000</div>
+                <div class="ht-bar" style="margin-bottom:8px"><div class="ht-bar-fill ht-fill-red" style="width:100%"></div></div>
+                <div style="display:flex;justify-content:space-between;font-size:0.68rem;margin-bottom:10px"><span style="color:#EF4444;font-weight:600">+₱200 over</span><span style="color:#9CA3AF">+4%</span></div>
+                <div style="display:flex;gap:6px">
+                  <button class="ht-btn ht-btn-ghost ht-btn-sm" style="flex:1">✏️ Edit</button>
+                  <button class="ht-btn ht-btn-danger ht-btn-sm">🗑️</button>
+                </div>
+              </div>
+              <div class="ht-card" style="border-top:3px solid #0EA5E9">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
+                  <div style="font-size:1.6rem">✈️</div>
+                  <span class="ht-pill ht-pill-sky">On Track</span>
+                </div>
+                <div style="font-size:0.9rem;font-weight:700;color:#111827;margin-bottom:2px">Travel</div>
+                <div style="font-size:0.72rem;color:#9CA3AF;margin-bottom:10px">₱3,500 of ₱12,000</div>
+                <div class="ht-bar" style="margin-bottom:8px"><div class="ht-bar-fill ht-fill-sky" style="width:29%"></div></div>
+                <div style="display:flex;justify-content:space-between;font-size:0.68rem;color:#9CA3AF;margin-bottom:10px"><span>29% used</span><span>₱8,500 left</span></div>
+                <div style="display:flex;gap:6px">
+                  <button class="ht-btn ht-btn-ghost ht-btn-sm" style="flex:1">✏️ Edit</button>
+                  <button class="ht-btn ht-btn-danger ht-btn-sm">🗑️</button>
+                </div>
+              </div>
+              <div class="ht-card" style="border-top:3px solid #8B5CF6">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
+                  <div style="font-size:1.6rem">🎮</div>
+                  <span class="ht-pill ht-pill-green">On Track</span>
+                </div>
+                <div style="font-size:0.9rem;font-weight:700;color:#111827;margin-bottom:2px">Entertainment</div>
+                <div style="font-size:0.72rem;color:#9CA3AF;margin-bottom:10px">₱1,800 of ₱3,000</div>
+                <div class="ht-bar" style="margin-bottom:8px"><div class="ht-bar-fill ht-fill-violet" style="width:60%"></div></div>
+                <div style="display:flex;justify-content:space-between;font-size:0.68rem;color:#9CA3AF;margin-bottom:10px"><span>60% used</span><span>₱1,200 left</span></div>
+                <div style="display:flex;gap:6px">
+                  <button class="ht-btn ht-btn-ghost ht-btn-sm" style="flex:1">✏️ Edit</button>
+                  <button class="ht-btn ht-btn-danger ht-btn-sm">🗑️</button>
+                </div>
+              </div>
+              <div class="ht-card" style="border-top:3px solid #F59E0B">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
+                  <div style="font-size:1.6rem">🚌</div>
+                  <span class="ht-pill ht-pill-green">On Track</span>
+                </div>
+                <div style="font-size:0.9rem;font-weight:700;color:#111827;margin-bottom:2px">Transport</div>
+                <div style="font-size:0.72rem;color:#9CA3AF;margin-bottom:10px">₱2,250 of ₱5,000</div>
+                <div class="ht-bar" style="margin-bottom:8px"><div class="ht-bar-fill ht-fill-amber" style="width:45%"></div></div>
+                <div style="display:flex;justify-content:space-between;font-size:0.68rem;color:#9CA3AF;margin-bottom:10px"><span>45% used</span><span>₱2,750 left</span></div>
+                <div style="display:flex;gap:6px">
+                  <button class="ht-btn ht-btn-ghost ht-btn-sm" style="flex:1">✏️ Edit</button>
+                  <button class="ht-btn ht-btn-danger ht-btn-sm">🗑️</button>
+                </div>
+              </div>
+              <!-- Add new card -->
+              <div class="ht-card" style="border:2px dashed #E5E7EB;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;cursor:pointer;min-height:180px;background:#FAFAFA">
+                <div style="width:36px;height:36px;border-radius:50%;background:#EEF2FF;display:flex;align-items:center;justify-content:center;font-size:1.2rem;color:#4F46E5">+</div>
+                <div style="font-size:0.82rem;font-weight:600;color:#6B7280">New Category</div>
+                <div style="font-size:0.72rem;color:#D1D5DB">Add custom budget</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ SCREEN 3: CREATE BUDGET MODAL ════ -->
+    <div class="ht-screen" id="mk-add-budget">
+      <div class="ht-screen-label">Screen 3 of 9 — Create Budget Category</div>
+      <div class="ht-chrome">
+        <div class="ht-chrome-dots"><div class="ht-d ht-d-r"></div><div class="ht-d ht-d-y"></div><div class="ht-d ht-d-g"></div></div>
+        <div class="ht-url-bar">app.happytracker.io / budgets</div>
+      </div>
+      <div style="max-width:980px;margin:0 auto;border-radius:0 0 12px 12px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,0.12)">
+        <div class="ht-modal-bg">
+          <div class="ht-modal-blur"></div>
+          <div class="ht-modal" style="width:420px">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+              <div style="width:36px;height:36px;border-radius:9px;background:#EEF2FF;display:flex;align-items:center;justify-content:center;font-size:1rem">🗂️</div>
+              <div>
+                <div class="ht-modal-title">Create Budget Category</div>
+                <div class="ht-modal-sub" style="margin:0">Define a spending bucket for your finances.</div>
+              </div>
+            </div>
+            <div class="ht-form-group">
+              <label class="ht-label">Category Name</label>
+              <input class="ht-input" type="text" value="Food & Dining" readonly>
+            </div>
+            <div class="ht-input-row">
+              <div class="ht-form-group" style="flex:1">
+                <label class="ht-label">Icon (Emoji)</label>
+                <input class="ht-input" type="text" value="🍔" readonly>
+              </div>
+              <div class="ht-form-group" style="flex:2">
+                <label class="ht-label">Monthly Limit (₱)</label>
+                <input class="ht-input" type="text" value="10,000.00" readonly>
+              </div>
+            </div>
+            <div class="ht-form-group">
+              <label class="ht-label">Color Tag</label>
+              <div class="ht-swatches">
+                <div class="ht-swatch sel" style="background:#4F46E5"></div>
+                <div class="ht-swatch" style="background:#10B981"></div>
+                <div class="ht-swatch" style="background:#F59E0B"></div>
+                <div class="ht-swatch" style="background:#EF4444"></div>
+                <div class="ht-swatch" style="background:#0EA5E9"></div>
+                <div class="ht-swatch" style="background:#8B5CF6"></div>
+                <div class="ht-swatch" style="background:#EC4899"></div>
+                <div class="ht-swatch" style="background:#14B8A6"></div>
+              </div>
+            </div>
+            <div class="ht-form-group">
+              <label class="ht-label">Alert at (%)</label>
+              <div style="display:flex;align-items:center;gap:8px">
+                <input class="ht-input" type="text" value="80" readonly style="max-width:80px">
+                <div style="font-size:0.78rem;color:#6B7280">Notify me when I reach 80% of limit</div>
+              </div>
+            </div>
+            <div class="ht-form-group">
+              <label class="ht-label">Notes (optional)</label>
+              <input class="ht-input" type="text" value="Daily meals, delivery, groceries..." readonly>
+            </div>
+            <div class="ht-modal-footer">
+              <button class="ht-btn ht-btn-ghost">Cancel</button>
+              <button class="ht-btn ht-btn-primary">✓ Create Category</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ SCREEN 4: GOALS ════ -->
+    <div class="ht-screen" id="mk-goals">
+      <div class="ht-screen-label">Screen 4 of 9 — Budget Goals</div>
+      <div class="ht-chrome">
+        <div class="ht-chrome-dots"><div class="ht-d ht-d-r"></div><div class="ht-d ht-d-y"></div><div class="ht-d ht-d-g"></div></div>
+        <div class="ht-url-bar">app.happytracker.io / goals</div>
+      </div>
+      <div class="ht-shell">
+        <div class="ht-sidebar">
+          <div class="ht-logo"><div class="ht-logo-emoji">😊</div>HappyTracker</div>
+          <div class="ht-sidebar-section">Main</div>
+          <div class="ht-nav-item"><span class="ht-nav-icon">📊</span>Dashboard</div>
+          <div class="ht-nav-item"><span class="ht-nav-icon">💸</span>Transactions</div>
+          <div class="ht-nav-item"><span class="ht-nav-icon">🗂️</span>Budgets</div>
+          <div class="ht-nav-item active"><span class="ht-nav-icon">🎯</span>Goals</div>
+          <div class="ht-nav-item"><span class="ht-nav-icon">📅</span>Reports</div>
+          <div class="ht-sidebar-divider"></div>
+          <div class="ht-nav-item"><span class="ht-nav-icon">🔔</span>Notifications<span class="ht-notif-dot"></span></div>
+          <div class="ht-nav-item"><span class="ht-nav-icon">⚙️</span>Settings</div>
+          <div class="ht-user-pill">
+            <div class="ht-avatar">JP</div>
+            <div><div class="ht-user-name">John Paul V.</div><div class="ht-user-plan">Pro Plan</div></div>
+          </div>
+        </div>
+        <div class="ht-main">
+          <div class="ht-topbar">
+            <div>
+              <div class="ht-topbar-title">Financial Goals</div>
+              <div class="ht-topbar-sub">3 active · 1 completed · 0 paused</div>
+            </div>
+            <div class="ht-topbar-actions">
+              <button class="ht-btn ht-btn-ghost ht-btn-sm">All Status ▾</button>
+              <button class="ht-btn ht-btn-primary ht-btn-sm">+ New Goal</button>
+            </div>
+          </div>
+          <div class="ht-content">
+            <div class="ht-stat-row" style="margin-bottom:14px">
+              <div class="ht-stat"><div class="ht-stat-label">Total Target</div><div class="ht-stat-val" style="font-size:1.1rem">₱195,000</div></div>
+              <div class="ht-stat"><div class="ht-stat-label">Saved So Far</div><div class="ht-stat-val" style="font-size:1.1rem">₱78,000</div><div class="ht-stat-badge ht-up">40% overall</div></div>
+              <div class="ht-stat"><div class="ht-stat-label">Remaining</div><div class="ht-stat-val" style="font-size:1.1rem">₱117,000</div></div>
+              <div class="ht-stat"><div class="ht-stat-label">Completed</div><div class="ht-stat-val" style="font-size:1.1rem">1 Goal 🎉</div></div>
+            </div>
+            <div class="ht-goal">
+              <div class="ht-goal-row">
+                <div><div class="ht-goal-name">🏠 Emergency Fund</div><div class="ht-goal-sub">Deadline: Dec 31, 2026 · No linked category</div></div>
+                <span class="ht-pill ht-pill-green">On Track</span>
+              </div>
+              <div class="ht-goal-amounts"><div class="ht-goal-cur">₱45,000</div><div class="ht-goal-target">of ₱100,000</div></div>
+              <div class="ht-bar" style="height:8px;margin-bottom:6px"><div class="ht-bar-fill ht-fill-emerald" style="width:45%"></div></div>
+              <div class="ht-goal-foot"><span>45% complete</span><span>₱55,000 remaining</span><span>9.5 months left</span></div>
+              <div style="display:flex;gap:6px;margin-top:10px">
+                <button class="ht-btn ht-btn-outline ht-btn-sm">+ Add Progress</button>
+                <button class="ht-btn ht-btn-ghost ht-btn-sm">✏️ Edit</button>
+                <button class="ht-btn ht-btn-danger ht-btn-sm">Pause</button>
+              </div>
+            </div>
+            <div class="ht-goal">
+              <div class="ht-goal-row">
+                <div><div class="ht-goal-name">✈️ Japan Trip 2026</div><div class="ht-goal-sub">Deadline: Aug 1, 2026 · Linked: Travel category</div></div>
+                <span class="ht-pill ht-pill-amber">Needs Attention</span>
+              </div>
+              <div class="ht-goal-amounts"><div class="ht-goal-cur">₱8,000</div><div class="ht-goal-target">of ₱60,000</div></div>
+              <div class="ht-bar" style="height:8px;margin-bottom:6px"><div class="ht-bar-fill ht-fill-amber" style="width:13%"></div></div>
+              <div class="ht-goal-foot"><span>13% complete</span><span>₱52,000 remaining</span><span>4.5 months left</span></div>
+              <div style="display:flex;gap:6px;margin-top:10px">
+                <button class="ht-btn ht-btn-outline ht-btn-sm">+ Add Progress</button>
+                <button class="ht-btn ht-btn-ghost ht-btn-sm">✏️ Edit</button>
+                <button class="ht-btn ht-btn-danger ht-btn-sm">Pause</button>
+              </div>
+            </div>
+            <div class="ht-goal">
+              <div class="ht-goal-row">
+                <div><div class="ht-goal-name">💻 New Laptop</div><div class="ht-goal-sub">Deadline: Jun 15, 2026 · No linked category</div></div>
+                <span class="ht-pill ht-pill-green">On Track</span>
+              </div>
+              <div class="ht-goal-amounts"><div class="ht-goal-cur">₱25,000</div><div class="ht-goal-target">of ₱35,000</div></div>
+              <div class="ht-bar" style="height:8px;margin-bottom:6px"><div class="ht-bar-fill ht-fill-indigo" style="width:71%"></div></div>
+              <div class="ht-goal-foot"><span>71% complete</span><span>₱10,000 remaining</span><span>3 months left</span></div>
+              <div style="display:flex;gap:6px;margin-top:10px">
+                <button class="ht-btn ht-btn-outline ht-btn-sm">+ Add Progress</button>
+                <button class="ht-btn ht-btn-ghost ht-btn-sm">✏️ Edit</button>
+                <button class="ht-btn ht-btn-danger ht-btn-sm">Pause</button>
+              </div>
+            </div>
+            <!-- Completed -->
+            <div class="ht-goal" style="border:1px solid #D1FAE5;background:#FAFFFE">
+              <div class="ht-goal-row">
+                <div><div class="ht-goal-name">📱 New Phone <span style="font-size:0.8rem">🎉</span></div><div class="ht-goal-sub">Completed: Jan 10, 2026</div></div>
+                <span class="ht-pill ht-pill-green">Completed</span>
+              </div>
+              <div class="ht-goal-amounts"><div class="ht-goal-cur" style="color:#10B981">₱32,000</div><div class="ht-goal-target">of ₱32,000</div></div>
+              <div class="ht-bar" style="height:8px;margin-bottom:6px"><div class="ht-bar-fill ht-fill-emerald" style="width:100%"></div></div>
+              <div class="ht-goal-foot"><span style="color:#10B981">✓ Goal achieved!</span><span></span><span>3 months ahead of schedule</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ SCREEN 5: TRANSACTIONS ════ -->
+    <div class="ht-screen" id="mk-transactions">
+      <div class="ht-screen-label">Screen 5 of 9 — Transactions</div>
+      <div class="ht-chrome">
+        <div class="ht-chrome-dots"><div class="ht-d ht-d-r"></div><div class="ht-d ht-d-y"></div><div class="ht-d ht-d-g"></div></div>
+        <div class="ht-url-bar">app.happytracker.io / transactions</div>
+      </div>
+      <div class="ht-shell">
+        <div class="ht-sidebar">
+          <div class="ht-logo"><div class="ht-logo-emoji">😊</div>HappyTracker</div>
+          <div class="ht-sidebar-section">Main</div>
+          <div class="ht-nav-item"><span class="ht-nav-icon">📊</span>Dashboard</div>
+          <div class="ht-nav-item active"><span class="ht-nav-icon">💸</span>Transactions</div>
+          <div class="ht-nav-item"><span class="ht-nav-icon">🗂️</span>Budgets</div>
+          <div class="ht-nav-item"><span class="ht-nav-icon">🎯</span>Goals</div>
+          <div class="ht-nav-item"><span class="ht-nav-icon">📅</span>Reports</div>
+          <div class="ht-sidebar-divider"></div>
+          <div class="ht-nav-item"><span class="ht-nav-icon">🔔</span>Notifications<span class="ht-notif-dot"></span></div>
+          <div class="ht-nav-item"><span class="ht-nav-icon">⚙️</span>Settings</div>
+          <div class="ht-user-pill">
+            <div class="ht-avatar">JP</div>
+            <div><div class="ht-user-name">John Paul V.</div><div class="ht-user-plan">Pro Plan</div></div>
+          </div>
+        </div>
+        <div class="ht-main">
+          <div class="ht-topbar">
+            <div>
+              <div class="ht-topbar-title">Transactions</div>
+              <div class="ht-topbar-sub">24 transactions this month</div>
+            </div>
+            <div class="ht-topbar-actions">
+              <div class="ht-search" style="background:#F3F4F6;font-size:0.75rem">🔍 Search transactions...</div>
+              <button class="ht-btn ht-btn-ghost ht-btn-sm">All Categories ▾</button>
+              <button class="ht-btn ht-btn-ghost ht-btn-sm">Mar 2026 ▾</button>
+              <button class="ht-btn ht-btn-ghost ht-btn-sm">All Types ▾</button>
+              <button class="ht-btn ht-btn-primary ht-btn-sm">+ Add</button>
+            </div>
+          </div>
+          <div class="ht-content">
+            <!-- Summary strip -->
+            <div style="display:flex;gap:12px;margin-bottom:12px">
+              <div class="ht-card" style="flex:1;padding:10px 14px">
+                <div class="ht-stat-label">Income</div>
+                <div style="font-size:1rem;font-weight:700;color:#10B981">+₱48,500</div>
+              </div>
+              <div class="ht-card" style="flex:1;padding:10px 14px">
+                <div class="ht-stat-label">Expenses</div>
+                <div style="font-size:1rem;font-weight:700;color:#EF4444">-₱31,240</div>
+              </div>
+              <div class="ht-card" style="flex:1;padding:10px 14px">
+                <div class="ht-stat-label">Net</div>
+                <div style="font-size:1rem;font-weight:700;color:#4F46E5">+₱17,260</div>
+              </div>
+              <div class="ht-card" style="flex:1;padding:10px 14px">
+                <div class="ht-stat-label">Largest</div>
+                <div style="font-size:1rem;font-weight:700;color:#111827">₱9,800</div>
+              </div>
+            </div>
+            <!-- Table -->
+            <div class="ht-card" style="padding:0;overflow:hidden">
+              <table class="ht-table">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Description</th>
+                    <th>Category</th>
+                    <th>Type</th>
+                    <th style="text-align:right">Amount</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td style="color:#6B7280;font-size:0.75rem">Mar 1</td>
+                    <td style="font-weight:600;color:#111827">Monthly Salary</td>
+                    <td><span class="ht-pill ht-pill-green">💰 Income</span></td>
+                    <td><span class="ht-pill ht-pill-sky">Income</span></td>
+                    <td style="text-align:right;font-weight:700" class="ht-income">+₱48,500</td>
+                    <td style="text-align:right"><button class="ht-btn ht-btn-ghost ht-btn-sm">✏️</button></td>
+                  </tr>
+                  <tr>
+                    <td style="color:#6B7280;font-size:0.75rem">Mar 12</td>
+                    <td style="font-weight:600;color:#111827">Jollibee Delivery</td>
+                    <td><span class="ht-pill ht-pill-amber">🍔 Food</span></td>
+                    <td><span class="ht-pill ht-pill-red">Expense</span></td>
+                    <td style="text-align:right;font-weight:700" class="ht-expense">-₱380</td>
+                    <td style="text-align:right"><button class="ht-btn ht-btn-ghost ht-btn-sm">✏️</button></td>
+                  </tr>
+                  <tr>
+                    <td style="color:#6B7280;font-size:0.75rem">Mar 11</td>
+                    <td style="font-weight:600;color:#111827">Meralco Electric Bill</td>
+                    <td><span class="ht-pill ht-pill-red">💡 Utilities</span></td>
+                    <td><span class="ht-pill ht-pill-red">Expense</span></td>
+                    <td style="text-align:right;font-weight:700" class="ht-expense">-₱2,100</td>
+                    <td style="text-align:right"><button class="ht-btn ht-btn-ghost ht-btn-sm">✏️</button></td>
+                  </tr>
+                  <tr>
+                    <td style="color:#6B7280;font-size:0.75rem">Mar 10</td>
+                    <td style="font-weight:600;color:#111827">Cebu Pacific Ticket</td>
+                    <td><span class="ht-pill ht-pill-sky">✈️ Travel</span></td>
+                    <td><span class="ht-pill ht-pill-red">Expense</span></td>
+                    <td style="text-align:right;font-weight:700" class="ht-expense">-₱3,500</td>
+                    <td style="text-align:right"><button class="ht-btn ht-btn-ghost ht-btn-sm">✏️</button></td>
+                  </tr>
+                  <tr>
+                    <td style="color:#6B7280;font-size:0.75rem">Mar 9</td>
+                    <td style="font-weight:600;color:#111827">Netflix Subscription</td>
+                    <td><span class="ht-pill ht-pill-violet">🎮 Entertainment</span></td>
+                    <td><span class="ht-pill ht-pill-red">Expense</span></td>
+                    <td style="text-align:right;font-weight:700" class="ht-expense">-₱549</td>
+                    <td style="text-align:right"><button class="ht-btn ht-btn-ghost ht-btn-sm">✏️</button></td>
+                  </tr>
+                  <tr>
+                    <td style="color:#6B7280;font-size:0.75rem">Mar 8</td>
+                    <td style="font-weight:600;color:#111827">Grab Car – EDSA</td>
+                    <td><span class="ht-pill ht-pill-amber">🚌 Transport</span></td>
+                    <td><span class="ht-pill ht-pill-red">Expense</span></td>
+                    <td style="text-align:right;font-weight:700" class="ht-expense">-₱180</td>
+                    <td style="text-align:right"><button class="ht-btn ht-btn-ghost ht-btn-sm">✏️</button></td>
+                  </tr>
+                </tbody>
+              </table>
+              <div style="padding:10px 14px;border-top:1px solid #F3F4F6;display:flex;justify-content:space-between;align-items:center">
+                <div style="font-size:0.72rem;color:#9CA3AF">Showing 6 of 24 transactions</div>
+                <div style="display:flex;gap:4px">
+                  <button class="ht-btn ht-btn-ghost ht-btn-sm">← Prev</button>
+                  <button class="ht-btn ht-btn-primary ht-btn-sm">1</button>
+                  <button class="ht-btn ht-btn-ghost ht-btn-sm">2</button>
+                  <button class="ht-btn ht-btn-ghost ht-btn-sm">3</button>
+                  <button class="ht-btn ht-btn-ghost ht-btn-sm">Next →</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ SCREEN 6: REPORTS ════ -->
+    <div class="ht-screen" id="mk-reports">
+      <div class="ht-screen-label">Screen 6 of 9 — Monthly Reports</div>
+      <div class="ht-chrome">
+        <div class="ht-chrome-dots"><div class="ht-d ht-d-r"></div><div class="ht-d ht-d-y"></div><div class="ht-d ht-d-g"></div></div>
+        <div class="ht-url-bar">app.happytracker.io / reports</div>
+      </div>
+      <div class="ht-shell">
+        <div class="ht-sidebar">
+          <div class="ht-logo"><div class="ht-logo-emoji">😊</div>HappyTracker</div>
+          <div class="ht-sidebar-section">Main</div>
+          <div class="ht-nav-item"><span class="ht-nav-icon">📊</span>Dashboard</div>
+          <div class="ht-nav-item"><span class="ht-nav-icon">💸</span>Transactions</div>
+          <div class="ht-nav-item"><span class="ht-nav-icon">🗂️</span>Budgets</div>
+          <div class="ht-nav-item"><span class="ht-nav-icon">🎯</span>Goals</div>
+          <div class="ht-nav-item active"><span class="ht-nav-icon">📅</span>Reports</div>
+          <div class="ht-sidebar-divider"></div>
+          <div class="ht-nav-item"><span class="ht-nav-icon">🔔</span>Notifications<span class="ht-notif-dot"></span></div>
+          <div class="ht-nav-item"><span class="ht-nav-icon">⚙️</span>Settings</div>
+          <div class="ht-user-pill">
+            <div class="ht-avatar">JP</div>
+            <div><div class="ht-user-name">John Paul V.</div><div class="ht-user-plan">Pro Plan</div></div>
+          </div>
+        </div>
+        <div class="ht-main">
+          <div class="ht-topbar">
+            <div>
+              <div class="ht-topbar-title">Monthly Reports</div>
+              <div class="ht-topbar-sub">Financial summary and trends</div>
+            </div>
+            <div class="ht-topbar-actions">
+              <button class="ht-btn ht-btn-ghost ht-btn-sm">Q1 2026 ▾</button>
+              <button class="ht-btn ht-btn-outline ht-btn-sm">⬇️ Export CSV</button>
+            </div>
+          </div>
+          <div class="ht-content">
+            <div class="ht-stat-row" style="margin-bottom:14px">
+              <div class="ht-stat"><div class="ht-stat-label">Q1 Total Income</div><div class="ht-stat-val">₱142,500</div><div class="ht-stat-badge ht-up">↑ 3.1% YoY</div></div>
+              <div class="ht-stat"><div class="ht-stat-label">Q1 Total Expenses</div><div class="ht-stat-val">₱91,840</div><div class="ht-stat-badge ht-down">↑ 5.4% YoY</div></div>
+              <div class="ht-stat"><div class="ht-stat-label">Q1 Net Savings</div><div class="ht-stat-val">₱50,660</div><div class="ht-stat-badge ht-up">35.5% rate</div></div>
+            </div>
+            <div class="ht-grid-2" style="margin-bottom:12px">
+              <!-- Bar chart -->
+              <div class="ht-card">
+                <div class="ht-card-header">
+                  <div class="ht-card-title">Income vs Expenses (Q1 2026)</div>
+                </div>
+                <!-- Simplified bar chart with CSS -->
+                <div style="display:flex;align-items:flex-end;gap:16px;height:100px;padding:0 10px;margin-bottom:8px">
+                  <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex:1">
+                    <div style="width:100%;display:flex;gap:4px;align-items:flex-end;height:90px">
+                      <div style="flex:1;background:#4F46E5;border-radius:4px 4px 0 0;height:88%"></div>
+                      <div style="flex:1;background:#FCA5A5;border-radius:4px 4px 0 0;height:64%"></div>
+                    </div>
+                    <div style="font-size:0.65rem;color:#9CA3AF">Jan</div>
+                  </div>
+                  <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex:1">
+                    <div style="width:100%;display:flex;gap:4px;align-items:flex-end;height:90px">
+                      <div style="flex:1;background:#4F46E5;border-radius:4px 4px 0 0;height:80%"></div>
+                      <div style="flex:1;background:#FCA5A5;border-radius:4px 4px 0 0;height:58%"></div>
+                    </div>
+                    <div style="font-size:0.65rem;color:#9CA3AF">Feb</div>
+                  </div>
+                  <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex:1">
+                    <div style="width:100%;display:flex;gap:4px;align-items:flex-end;height:90px">
+                      <div style="flex:1;background:#4F46E5;border-radius:4px 4px 0 0;height:95%"></div>
+                      <div style="flex:1;background:#FCA5A5;border-radius:4px 4px 0 0;height:68%"></div>
+                    </div>
+                    <div style="font-size:0.65rem;color:#9CA3AF">Mar</div>
+                  </div>
+                </div>
+                <div style="display:flex;gap:14px;font-size:0.72rem;padding-left:10px">
+                  <div style="display:flex;align-items:center;gap:5px"><div style="width:10px;height:10px;border-radius:2px;background:#4F46E5"></div>Income</div>
+                  <div style="display:flex;align-items:center;gap:5px"><div style="width:10px;height:10px;border-radius:2px;background:#FCA5A5"></div>Expenses</div>
+                </div>
+              </div>
+              <!-- Monthly breakdown table -->
+              <div class="ht-card">
+                <div class="ht-card-header">
+                  <div class="ht-card-title">Month-by-Month Breakdown</div>
+                </div>
+                <div style="margin-bottom:4px">
+                  <div class="ht-summary-row" style="font-weight:600;font-size:0.72rem;color:#9CA3AF;border-bottom:2px solid #F3F4F6">
+                    <span>Month</span><span>Income</span><span>Expenses</span><span>Savings</span>
+                  </div>
+                  <div class="ht-summary-row"><span style="color:#374151;font-weight:600">January</span><span class="ht-income">₱46,000</span><span class="ht-expense">₱29,400</span><span style="color:#4F46E5;font-weight:600">₱16,600</span></div>
+                  <div class="ht-summary-row"><span style="color:#374151;font-weight:600">February</span><span class="ht-income">₱48,000</span><span class="ht-expense">₱31,200</span><span style="color:#4F46E5;font-weight:600">₱16,800</span></div>
+                  <div class="ht-summary-row" style="background:#EEF2FF;border-radius:6px;padding:8px"><span style="color:#374151;font-weight:700">March ←</span><span class="ht-income">₱48,500</span><span class="ht-expense">₱31,240</span><span style="color:#4F46E5;font-weight:700">₱17,260</span></div>
+                  <div class="ht-summary-row" style="font-weight:700;border-top:2px solid #F3F4F6;margin-top:4px"><span style="color:#111827">Q1 Total</span><span class="ht-income">₱142,500</span><span class="ht-expense">₱91,840</span><span style="color:#4F46E5">₱50,660</span></div>
+                </div>
+              </div>
+            </div>
+            <!-- Category comparison -->
+            <div class="ht-card">
+              <div class="ht-card-header">
+                <div class="ht-card-title">Spending by Category — March vs February</div>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px">
+                <div style="text-align:center">
+                  <div style="font-size:1.1rem">🍔</div>
+                  <div style="font-size:0.7rem;color:#374151;font-weight:600;margin:4px 0">Food</div>
+                  <div class="ht-bar" style="margin-bottom:4px"><div class="ht-bar-fill ht-fill-amber" style="width:78%"></div></div>
+                  <div style="font-size:0.68rem;color:#9CA3AF">₱7,800 Mar</div>
+                  <div style="font-size:0.66rem;color:#10B981">↓ vs ₱8,100</div>
+                </div>
+                <div style="text-align:center">
+                  <div style="font-size:1.1rem">💡</div>
+                  <div style="font-size:0.7rem;color:#374151;font-weight:600;margin:4px 0">Utilities</div>
+                  <div class="ht-bar" style="margin-bottom:4px"><div class="ht-bar-fill ht-fill-red" style="width:100%"></div></div>
+                  <div style="font-size:0.68rem;color:#9CA3AF">₱5,200 Mar</div>
+                  <div style="font-size:0.66rem;color:#EF4444">↑ vs ₱4,800</div>
+                </div>
+                <div style="text-align:center">
+                  <div style="font-size:1.1rem">✈️</div>
+                  <div style="font-size:0.7rem;color:#374151;font-weight:600;margin:4px 0">Travel</div>
+                  <div class="ht-bar" style="margin-bottom:4px"><div class="ht-bar-fill ht-fill-sky" style="width:29%"></div></div>
+                  <div style="font-size:0.68rem;color:#9CA3AF">₱3,500 Mar</div>
+                  <div style="font-size:0.66rem;color:#EF4444">↑ vs ₱1,200</div>
+                </div>
+                <div style="text-align:center">
+                  <div style="font-size:1.1rem">🚌</div>
+                  <div style="font-size:0.7rem;color:#374151;font-weight:600;margin:4px 0">Transport</div>
+                  <div class="ht-bar" style="margin-bottom:4px"><div class="ht-bar-fill ht-fill-emerald" style="width:45%"></div></div>
+                  <div style="font-size:0.68rem;color:#9CA3AF">₱2,250 Mar</div>
+                  <div style="font-size:0.66rem;color:#10B981">↓ vs ₱2,800</div>
+                </div>
+                <div style="text-align:center">
+                  <div style="font-size:1.1rem">🎮</div>
+                  <div style="font-size:0.7rem;color:#374151;font-weight:600;margin:4px 0">Entertainment</div>
+                  <div class="ht-bar" style="margin-bottom:4px"><div class="ht-bar-fill ht-fill-violet" style="width:60%"></div></div>
+                  <div style="font-size:0.68rem;color:#9CA3AF">₱1,800 Mar</div>
+                  <div style="font-size:0.66rem;color:#10B981">↓ vs ₱2,100</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ SCREEN 7: NOTIFICATIONS ════ -->
+    <div class="ht-screen" id="mk-notifications">
+      <div class="ht-screen-label">Screen 7 of 9 — Notifications</div>
+      <div class="ht-chrome">
+        <div class="ht-chrome-dots"><div class="ht-d ht-d-r"></div><div class="ht-d ht-d-y"></div><div class="ht-d ht-d-g"></div></div>
+        <div class="ht-url-bar">app.happytracker.io / notifications</div>
+      </div>
+      <div class="ht-shell">
+        <div class="ht-sidebar">
+          <div class="ht-logo"><div class="ht-logo-emoji">😊</div>HappyTracker</div>
+          <div class="ht-sidebar-section">Main</div>
+          <div class="ht-nav-item"><span class="ht-nav-icon">📊</span>Dashboard</div>
+          <div class="ht-nav-item"><span class="ht-nav-icon">💸</span>Transactions</div>
+          <div class="ht-nav-item"><span class="ht-nav-icon">🗂️</span>Budgets</div>
+          <div class="ht-nav-item"><span class="ht-nav-icon">🎯</span>Goals</div>
+          <div class="ht-nav-item"><span class="ht-nav-icon">📅</span>Reports</div>
+          <div class="ht-sidebar-divider"></div>
+          <div class="ht-nav-item active"><span class="ht-nav-icon">🔔</span>Notifications<span class="ht-notif-dot"></span></div>
+          <div class="ht-nav-item"><span class="ht-nav-icon">⚙️</span>Settings</div>
+          <div class="ht-user-pill">
+            <div class="ht-avatar">JP</div>
+            <div><div class="ht-user-name">John Paul V.</div><div class="ht-user-plan">Pro Plan</div></div>
+          </div>
+        </div>
+        <div class="ht-main">
+          <div class="ht-topbar">
+            <div>
+              <div class="ht-topbar-title">Notifications</div>
+              <div class="ht-topbar-sub">4 unread alerts</div>
+            </div>
+            <button class="ht-btn ht-btn-ghost ht-btn-sm">Mark all read</button>
+          </div>
+          <div class="ht-content">
+            <div style="font-size:0.75rem;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px">Today</div>
+            <div class="ht-card" style="margin-bottom:10px">
+              <div class="ht-notif-item">
+                <div class="ht-notif-icon" style="background:#FEF2F2">⚠️</div>
+                <div style="flex:1">
+                  <div class="ht-notif-title">Utilities Budget Exceeded</div>
+                  <div class="ht-notif-desc">You've spent ₱5,200 on Utilities — ₱200 over your ₱5,000 limit this month.</div>
+                  <div class="ht-notif-time">2 hours ago</div>
+                </div>
+                <div style="width:8px;height:8px;border-radius:50%;background:#EF4444;flex-shrink:0;margin-top:4px"></div>
+              </div>
+              <div class="ht-notif-item">
+                <div class="ht-notif-icon" style="background:#FEF3C7">📊</div>
+                <div style="flex:1">
+                  <div class="ht-notif-title">Food Budget at 80%</div>
+                  <div class="ht-notif-desc">You've used ₱7,800 of your ₱10,000 Food & Dining budget. You're at 78%.</div>
+                  <div class="ht-notif-time">5 hours ago</div>
+                </div>
+                <div style="width:8px;height:8px;border-radius:50%;background:#F59E0B;flex-shrink:0;margin-top:4px"></div>
+              </div>
+            </div>
+            <div style="font-size:0.75rem;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px">Yesterday</div>
+            <div class="ht-card" style="margin-bottom:10px">
+              <div class="ht-notif-item">
+                <div class="ht-notif-icon" style="background:#ECFDF5">🎯</div>
+                <div style="flex:1">
+                  <div class="ht-notif-title">Goal Milestone — Laptop 🎉</div>
+                  <div class="ht-notif-desc">Your "New Laptop" goal hit 70%! You've saved ₱25,000 of ₱35,000.</div>
+                  <div class="ht-notif-time">Yesterday · 9:14 AM</div>
+                </div>
+                <div style="width:8px;height:8px;border-radius:50%;background:#10B981;flex-shrink:0;margin-top:4px"></div>
+              </div>
+              <div class="ht-notif-item">
+                <div class="ht-notif-icon" style="background:#EEF2FF">📅</div>
+                <div style="flex:1">
+                  <div class="ht-notif-title">Monthly Report Available</div>
+                  <div class="ht-notif-desc">Your February 2026 summary is ready. Net savings: ₱16,800 (35%).</div>
+                  <div class="ht-notif-time">Yesterday · 12:00 AM</div>
+                </div>
+              </div>
+            </div>
+            <div style="font-size:0.75rem;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px">Mar 10</div>
+            <div class="ht-card">
+              <div class="ht-notif-item">
+                <div class="ht-notif-icon" style="background:#F5F3FF">💡</div>
+                <div style="flex:1">
+                  <div class="ht-notif-title">Savings Tip</div>
+                  <div class="ht-notif-desc">Your travel spending increased by 191% vs last month. Consider adjusting your Travel budget limit.</div>
+                  <div class="ht-notif-time">Mar 10 · 8:00 AM</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ SCREEN 8: SETTINGS ════ -->
+    <div class="ht-screen" id="mk-settings">
+      <div class="ht-screen-label">Screen 8 of 9 — Settings & Profile</div>
+      <div class="ht-chrome">
+        <div class="ht-chrome-dots"><div class="ht-d ht-d-r"></div><div class="ht-d ht-d-y"></div><div class="ht-d ht-d-g"></div></div>
+        <div class="ht-url-bar">app.happytracker.io / settings</div>
+      </div>
+      <div class="ht-shell">
+        <div class="ht-sidebar">
+          <div class="ht-logo"><div class="ht-logo-emoji">😊</div>HappyTracker</div>
+          <div class="ht-sidebar-section">Main</div>
+          <div class="ht-nav-item"><span class="ht-nav-icon">📊</span>Dashboard</div>
+          <div class="ht-nav-item"><span class="ht-nav-icon">💸</span>Transactions</div>
+          <div class="ht-nav-item"><span class="ht-nav-icon">🗂️</span>Budgets</div>
+          <div class="ht-nav-item"><span class="ht-nav-icon">🎯</span>Goals</div>
+          <div class="ht-nav-item"><span class="ht-nav-icon">📅</span>Reports</div>
+          <div class="ht-sidebar-divider"></div>
+          <div class="ht-nav-item"><span class="ht-nav-icon">🔔</span>Notifications</div>
+          <div class="ht-nav-item active"><span class="ht-nav-icon">⚙️</span>Settings</div>
+          <div class="ht-user-pill">
+            <div class="ht-avatar">JP</div>
+            <div><div class="ht-user-name">John Paul V.</div><div class="ht-user-plan">Pro Plan</div></div>
+          </div>
+        </div>
+        <div class="ht-main">
+          <div class="ht-topbar">
+            <div class="ht-topbar-title">Settings & Profile</div>
+            <button class="ht-btn ht-btn-primary ht-btn-sm">Save Changes</button>
+          </div>
+          <div class="ht-content">
+            <div class="ht-grid-2">
+              <!-- Profile -->
+              <div>
+                <div class="ht-profile-hero">
+                  <div class="ht-profile-avatar">JP</div>
+                  <div>
+                    <div style="font-size:1rem;font-weight:700">John Paul Valenzuela</div>
+                    <div style="font-size:0.78rem;opacity:0.8">johnpaul@email.com</div>
+                    <div style="margin-top:6px"><span style="background:rgba(255,255,255,0.2);padding:3px 9px;border-radius:10px;font-size:0.68rem;font-weight:600">😊 Pro Plan</span></div>
+                  </div>
+                </div>
+                <div class="ht-card">
+                  <div class="ht-card-title" style="margin-bottom:14px">Profile Information</div>
+                  <div class="ht-form-group"><label class="ht-label">Full Name</label><input class="ht-input" value="John Paul Valenzuela" readonly></div>
+                  <div class="ht-form-group"><label class="ht-label">Email</label><input class="ht-input" value="johnpaul@email.com" readonly></div>
+                  <div class="ht-form-group"><label class="ht-label">Currency</label><input class="ht-input" value="₱ Philippine Peso (PHP)" readonly></div>
+                  <div class="ht-form-group"><label class="ht-label">Budget Cycle</label><input class="ht-input" value="Monthly (1st–31st)" readonly></div>
+                </div>
+              </div>
+              <!-- Preferences -->
+              <div>
+                <div class="ht-card" style="margin-bottom:12px">
+                  <div class="ht-card-title" style="margin-bottom:12px">Notifications</div>
+                  <div class="ht-setting-row">
+                    <div><div style="font-size:0.82rem;font-weight:600;color:#374151">Budget limit alerts</div><div style="font-size:0.72rem;color:#9CA3AF">Notify when near or over limit</div></div>
+                    <div class="ht-toggle ht-toggle-on"><div class="ht-toggle-knob"></div></div>
+                  </div>
+                  <div class="ht-setting-row">
+                    <div><div style="font-size:0.82rem;font-weight:600;color:#374151">Goal milestones</div><div style="font-size:0.72rem;color:#9CA3AF">25%, 50%, 75%, 100%</div></div>
+                    <div class="ht-toggle ht-toggle-on"><div class="ht-toggle-knob"></div></div>
+                  </div>
+                  <div class="ht-setting-row">
+                    <div><div style="font-size:0.82rem;font-weight:600;color:#374151">Monthly report</div><div style="font-size:0.72rem;color:#9CA3AF">Auto-generated on 1st</div></div>
+                    <div class="ht-toggle ht-toggle-on"><div class="ht-toggle-knob"></div></div>
+                  </div>
+                  <div class="ht-setting-row">
+                    <div><div style="font-size:0.82rem;font-weight:600;color:#374151">Savings tips</div><div style="font-size:0.72rem;color:#9CA3AF">Weekly spending insights</div></div>
+                    <div class="ht-toggle ht-toggle-off"><div class="ht-toggle-knob"></div></div>
+                  </div>
+                </div>
+                <div class="ht-card">
+                  <div class="ht-card-title" style="margin-bottom:12px">Appearance & Security</div>
+                  <div class="ht-setting-row">
+                    <div><div style="font-size:0.82rem;font-weight:600;color:#374151">Dark Mode</div><div style="font-size:0.72rem;color:#9CA3AF">Switch to dark theme</div></div>
+                    <div class="ht-toggle ht-toggle-off"><div class="ht-toggle-knob"></div></div>
+                  </div>
+                  <div class="ht-setting-row">
+                    <div><div style="font-size:0.82rem;font-weight:600;color:#374151">Two-Factor Auth</div><div style="font-size:0.72rem;color:#9CA3AF">Extra login security</div></div>
+                    <div class="ht-toggle ht-toggle-on"><div class="ht-toggle-knob"></div></div>
+                  </div>
+                  <div class="ht-setting-row" style="border:none">
+                    <div><div style="font-size:0.82rem;font-weight:600;color:#EF4444">Delete Account</div><div style="font-size:0.72rem;color:#9CA3AF">Permanently remove all data</div></div>
+                    <button class="ht-btn ht-btn-danger ht-btn-sm">Delete</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ SCREEN 9: LOGIN ════ -->
+    <div class="ht-screen" id="mk-login">
+      <div class="ht-screen-label">Screen 9 of 9 — Login / Register</div>
+      <div class="ht-chrome">
+        <div class="ht-chrome-dots"><div class="ht-d ht-d-r"></div><div class="ht-d ht-d-y"></div><div class="ht-d ht-d-g"></div></div>
+        <div class="ht-url-bar">app.happytracker.io / login</div>
+      </div>
+      <div style="max-width:980px;margin:0 auto;border-radius:0 0 12px 12px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,0.12);height:580px;display:flex">
+        <!-- Left panel -->
+        <div style="flex:1;background:linear-gradient(140deg,#4F46E5 0%,#818CF8 60%,#A5B4FC 100%);padding:40px;display:flex;flex-direction:column;justify-content:space-between">
+          <div>
+            <div style="font-family:'DM Serif Display',serif;font-size:1.6rem;color:white;margin-bottom:4px">😊 HappyTracker</div>
+            <div style="font-size:0.85rem;color:rgba(255,255,255,0.7)">Your personal finance companion</div>
+          </div>
+          <div>
+            <div style="color:white;font-size:1.1rem;font-weight:700;margin-bottom:14px;line-height:1.4">Take control of<br>your money. <em>Finally.</em></div>
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <div style="display:flex;align-items:center;gap:10px;color:rgba(255,255,255,0.9);font-size:0.8rem">
+                <div style="width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center">📊</div>
+                Track custom budget categories
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;color:rgba(255,255,255,0.9);font-size:0.8rem">
+                <div style="width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center">🎯</div>
+                Set and achieve savings goals
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;color:rgba(255,255,255,0.9);font-size:0.8rem">
+                <div style="width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center">📅</div>
+                Monthly reports & insights
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;color:rgba(255,255,255,0.9);font-size:0.8rem">
+                <div style="width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center">🔔</div>
+                Smart budget limit alerts
+              </div>
+            </div>
+          </div>
+          <div style="font-size:0.7rem;color:rgba(255,255,255,0.4)">Secured with JWT · Spring Boot · PostgreSQL</div>
+        </div>
+        <!-- Right panel — login form -->
+        <div style="width:360px;background:#fff;padding:40px;display:flex;flex-direction:column;justify-content:center;flex-shrink:0">
+          <div style="font-size:1.1rem;font-weight:800;color:#111827;margin-bottom:4px">Welcome back 👋</div>
+          <div style="font-size:0.78rem;color:#6B7280;margin-bottom:24px">Sign in to your HappyTracker account</div>
+          <div class="ht-form-group">
+            <label class="ht-label">Email Address</label>
+            <input class="ht-input" type="email" value="johnpaul@email.com" readonly>
+          </div>
+          <div class="ht-form-group">
+            <label class="ht-label">Password</label>
+            <input class="ht-input" type="password" value="••••••••••" readonly>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px">
+            <label style="display:flex;align-items:center;gap:6px;font-size:0.75rem;color:#6B7280;cursor:pointer">
+              <input type="checkbox" checked readonly> Remember me
+            </label>
+            <div style="font-size:0.75rem;color:#4F46E5;cursor:pointer;font-weight:500">Forgot password?</div>
+          </div>
+          <button class="ht-btn ht-btn-primary" style="width:100%;padding:10px;font-size:0.85rem;margin-bottom:12px">Sign In →</button>
+          <div style="text-align:center;font-size:0.72rem;color:#9CA3AF;margin-bottom:12px">— or —</div>
+          <button class="ht-btn ht-btn-ghost" style="width:100%;padding:10px;font-size:0.82rem;margin-bottom:20px">🌐 Continue with Google</button>
+          <div style="text-align:center;font-size:0.75rem;color:#6B7280">Don't have an account? <span style="color:#4F46E5;font-weight:600;cursor:pointer">Sign up free</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end ht-wrap -->
+</div>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <div>Designed &amp; developed by <strong>John Paul Valenzuela</strong> &amp; <strong>Julliah Nicole Paran</strong></div>
+  <div style="margin-top:4px">© <span id="year"></span> HappyTracker. All rights reserved.</div>
+</footer>
+
+<script>
+  // ─── Year
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // ─── Tab switching
+  function switchTab(tabId, btn) {
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + tabId).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  // ─── Week toggle
+  function toggleWeek(header) {
+    const block = header.parentElement;
+    block.classList.toggle('open');
+  }
+
+  // ─── Mockup screen switching
+  function switchMockup(screenId, btn) {
+    document.querySelectorAll('.ht-screen').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.ht-mock-nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(screenId).classList.add('active');
+    btn.classList.add('active');
+  }
+</script>
+</body>
+</html>
