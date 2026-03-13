@@ -1297,123 +1297,62 @@
       </div>
     </div>
 
-<!-- FOLDER STRUCTURE -->
-<div class="section-title">✦ Project Folder Structure</div>
-
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:40px">
-
-  <!-- BACKEND -->
-  <div style="min-width:0">
-    <div style="font-size:0.8rem;font-weight:600;margin-bottom:8px;color:var(--muted)">
-      🍃 Backend (Spring Boot)
-    </div>
-
-<div class="folder-tree">
-<span class="ft-dir">fintrack-backend/</span>
-├── <span class="ft-dir">src/</span>
-│   └── <span class="ft-dir">main/</span>
-│       ├── <span class="ft-dir">java/com/fintrack/</span>
-│       │   │
-│       │   ├── <span class="ft-dir">config/</span>
-│       │   │   ├── <span class="ft-file">SecurityConfig.java</span>
-│       │   │   ├── <span class="ft-file">JwtConfig.java</span>
-│       │   │   └── <span class="ft-file">CorsConfig.java</span>
-│       │   │
-│       │   ├── <span class="ft-dir">controller/</span>
-│       │   │   ├── <span class="ft-file">AuthController.java</span>
-│       │   │   ├── <span class="ft-file">CategoryController.java</span>
-│       │   │   ├── <span class="ft-file">TransactionController.java</span>
-│       │   │   ├── <span class="ft-file">GoalController.java</span>
-│       │   │   └── <span class="ft-file">DashboardController.java</span>
-│       │   │
-│       │   ├── <span class="ft-dir">dto/</span>
-│       │   │   ├── <span class="ft-file">LoginRequest.java</span>
-│       │   │   ├── <span class="ft-file">RegisterRequest.java</span>
-│       │   │   ├── <span class="ft-file">AuthResponse.java</span>
-│       │   │   ├── <span class="ft-file">CategoryRequest.java</span>
-│       │   │   ├── <span class="ft-file">CategoryResponse.java</span>
-│       │   │   ├── <span class="ft-file">TransactionRequest.java</span>
-│       │   │   ├── <span class="ft-file">TransactionResponse.java</span>
-│       │   │   ├── <span class="ft-file">GoalRequest.java</span>
-│       │   │   ├── <span class="ft-file">GoalResponse.java</span>
-│       │   │   └── <span class="ft-file">DashboardSummaryResponse.java</span>
-│       │   │
-│       │   ├── <span class="ft-dir">entity/</span>
-│       │   │   ├── <span class="ft-file">User.java</span>
-│       │   │   ├── <span class="ft-file">BudgetCategory.java</span>
-│       │   │   ├── <span class="ft-file">Transaction.java</span>
-│       │   │   └── <span class="ft-file">BudgetGoal.java</span>
-│       │   │
-│       │   ├── <span class="ft-dir">repository/</span>
-│       │   │   ├── <span class="ft-file">UserRepository.java</span>
-│       │   │   ├── <span class="ft-file">CategoryRepository.java</span>
-│       │   │   ├── <span class="ft-file">TransactionRepository.java</span>
-│       │   │   └── <span class="ft-file">GoalRepository.java</span>
-│       │   │
-│       │   ├── <span class="ft-dir">service/</span>
-│       │   │   ├── <span class="ft-file">AuthService.java</span>
-│       │   │   ├── <span class="ft-file">CategoryService.java</span>
-│       │   │   ├── <span class="ft-file">TransactionService.java</span>
-│       │   │   ├── <span class="ft-file">GoalService.java</span>
-│       │   │   └── <span class="ft-file">DashboardService.java</span>
-│       │   │
-│       │   ├── <span class="ft-dir">security/</span>
-│       │   │   ├── <span class="ft-file">JwtAuthenticationFilter.java</span>
-│       │   │   ├── <span class="ft-file">JwtTokenProvider.java</span>
-│       │   │   ├── <span class="ft-file">CustomUserDetailsService.java</span>
-│       │   │   └── <span class="ft-file">JwtAuthenticationEntryPoint.java</span>
-│       │   │
-│       │   └── <span class="ft-file">FintrackApplication.java</span>
-│       │
-│       └── <span class="ft-dir">resources/</span>
-│           ├── <span class="ft-file">application.properties</span>
-│           ├── <span class="ft-file">schema.sql</span>
-│           └── <span class="ft-file">data.sql</span>
-│
-├── <span class="ft-file">pom.xml</span>
-├── <span class="ft-file">Dockerfile</span>
-└── <span class="ft-file">README.md</span>
-</div>
   </div>
 
+  <!-- FOLDER STRUCTURE -->
+  <div class="section-title">✦ Project Folder Structure</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:40px">
 
-  <!-- FRONTEND -->
-  <div style="min-width:0">
-    <div style="font-size:0.8rem;font-weight:600;margin-bottom:8px;color:var(--muted)">
-      ⚛ Frontend (React + React Router)
+    <div style="min-width:0">
+      <div style="font-size:0.8rem;font-weight:600;margin-bottom:8px;color:var(--muted)">🍃 Backend (Spring Boot)</div>
+      <div class="folder-tree">
+<span class="ft-dir">fintrack-backend/</span>
+├── <span class="ft-dir">src/main/java/com/fintrack/</span>
+│   ├── <span class="ft-dir">config/</span>           <span class="ft-comment"># SecurityConfig, JwtConfig</span>
+│   ├── <span class="ft-dir">controller/</span>       <span class="ft-comment"># REST controllers</span>
+│   │   ├── <span class="ft-file">AuthController.java</span>
+│   │   ├── <span class="ft-file">CategoryController.java</span>
+│   │   ├── <span class="ft-file">TransactionController.java</span>
+│   │   ├── <span class="ft-file">GoalController.java</span>
+│   │   └── <span class="ft-file">DashboardController.java</span>
+│   ├── <span class="ft-dir">dto/</span>              <span class="ft-comment"># Request/Response DTOs</span>
+│   ├── <span class="ft-dir">entity/</span>           <span class="ft-comment"># JPA Entities</span>
+│   │   ├── <span class="ft-file">User.java</span>
+│   │   ├── <span class="ft-file">BudgetCategory.java</span>
+│   │   ├── <span class="ft-file">Transaction.java</span>
+│   │   └── <span class="ft-file">BudgetGoal.java</span>
+│   ├── <span class="ft-dir">repository/</span>       <span class="ft-comment"># JPA Repositories</span>
+│   ├── <span class="ft-dir">service/</span>          <span class="ft-comment"># Business Logic</span>
+│   ├── <span class="ft-dir">security/</span>         <span class="ft-comment"># JWT filter & util</span>
+│   └── <span class="ft-file">FintrackApplication.java</span>
+├── <span class="ft-dir">src/main/resources/</span>
+│   ├── <span class="ft-file">application.properties</span>
+│   └── <span class="ft-file">schema.sql</span>
+└── <span class="ft-file">pom.xml</span>
+      </div>
     </div>
 
-<div class="folder-tree">
+    <div style="min-width:0">
+      <div style="font-size:0.8rem;font-weight:600;margin-bottom:8px;color:var(--muted)">⚛ Frontend (React + React Router)</div>
+      <div class="folder-tree">
 <span class="ft-dir">fintrack-frontend/</span>
-│
-├── <span class="ft-dir">public/</span>
-│   └── <span class="ft-file">favicon.svg</span>
-│
 ├── <span class="ft-dir">src/</span>
-│   │
-│   ├── <span class="ft-dir">api/</span>
-│   │   ├── <span class="ft-file">axiosClient.js</span>
+│   ├── <span class="ft-dir">api/</span>              <span class="ft-comment"># Axios API calls</span>
 │   │   ├── <span class="ft-file">auth.js</span>
 │   │   ├── <span class="ft-file">categories.js</span>
 │   │   ├── <span class="ft-file">transactions.js</span>
 │   │   └── <span class="ft-file">goals.js</span>
-│   │
-│   ├── <span class="ft-dir">components/</span>
+│   ├── <span class="ft-dir">components/</span>       <span class="ft-comment"># Reusable UI</span>
 │   │   ├── <span class="ft-file">Sidebar.jsx</span>
-│   │   ├── <span class="ft-file">Navbar.jsx</span>
 │   │   ├── <span class="ft-file">StatCard.jsx</span>
 │   │   ├── <span class="ft-file">BudgetCard.jsx</span>
 │   │   ├── <span class="ft-file">GoalCard.jsx</span>
-│   │   ├── <span class="ft-file">TransactionRow.jsx</span>
-│   │   └── <span class="ft-file">ProtectedRoute.jsx</span>
-│   │
+│   │   └── <span class="ft-file">TransactionRow.jsx</span>
 │   ├── <span class="ft-dir">context/</span>
 │   │   └── <span class="ft-file">AuthContext.jsx</span>
-│   │
 │   ├── <span class="ft-dir">hooks/</span>
 │   │   ├── <span class="ft-file">useAuth.js</span>
 │   │   └── <span class="ft-file">useDashboard.js</span>
-│   │
 │   ├── <span class="ft-dir">pages/</span>
 │   │   ├── <span class="ft-file">LoginPage.jsx</span>
 │   │   ├── <span class="ft-file">RegisterPage.jsx</span>
@@ -1421,22 +1360,14 @@
 │   │   ├── <span class="ft-file">CategoriesPage.jsx</span>
 │   │   ├── <span class="ft-file">TransactionsPage.jsx</span>
 │   │   └── <span class="ft-file">GoalsPage.jsx</span>
-│   │
 │   ├── <span class="ft-dir">router/</span>
-│   │   └── <span class="ft-file">AppRouter.jsx</span>
-│   │
-│   ├── <span class="ft-file">App.jsx</span>
-│   ├── <span class="ft-file">main.jsx</span>
-│   └── <span class="ft-file">index.css</span>
-│
-├── <span class="ft-file">package.json</span>
-├── <span class="ft-file">vite.config.js</span>
-└── <span class="ft-file">README.md</span>
-</div>
+│   │   └── <span class="ft-file">AppRouter.jsx</span>   <span class="ft-comment"># React Router config</span>
+│   └── <span class="ft-file">main.jsx</span>
+└── <span class="ft-file">vite.config.js</span>
+      </div>
+    </div>
 
   </div>
-
-</div>
 
   <!-- API ENDPOINTS -->
   <div class="section-title">✦ REST API Endpoints</div>
@@ -3014,11 +2945,4 @@
 
   // ─── Mockup screen switching
   function switchMockup(screenId, btn) {
-    document.querySelectorAll('.ht-screen').forEach(s => s.classList.remove('active'));
-    document.querySelectorAll('.ht-mock-nav-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById(screenId).classList.add('active');
-    btn.classList.add('active');
-  }
-</script>
-</body>
-</html>
+    document.querySelectorAll('.ht-screen').forEach(s => s.classList.remove('ac
